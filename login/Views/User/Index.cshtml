@@ -1,0 +1,340 @@
+﻿@{
+    ViewBag.Title = "Index";
+    List<string> listuser = new List<string>();
+}
+
+<style>
+    .k-grid-importExcel {
+        padding: 2px 4px;
+    }
+</style>
+
+<div class="col-md-7">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title text-center">
+                Utilisateurs
+            </h3>
+        </div>
+        <div class="panel-body">
+            <div style="display: none;">
+                <input type="file" name="files" id="filesProjet" aria-label="files" />
+                <div id="window">
+                </div>
+            </div>
+            <input id="drpAbonne" style="width: 250px;" />
+            <div id="grid_Utilisateur"></div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-5">
+    <div class="panel panel-default">
+        <div class="panel-heading text-center">
+            <h3 class="panel-title">Rôles</h3>
+        </div>
+        <div class="panel-body">
+            <div id="gridRoleCreate"></div>
+        </div>
+    </div>
+</div>
+
+<script id="templateRU" type="text/kendo-tmpl">
+    <div class="tabstrip">
+        <ul>
+            <li>Rôles</li>
+        </ul>
+        <div></div>
+    </div>
+</script>
+
+<div id="dialog"></div>
+
+<script>
+    var urlCRM = @(Html.Raw(Json.Encode(ViewBag.URLCRM)));
+
+    var dialog = $("#dialog").kendoWindow({
+        content: urlCRM + "/Client/ExtRecherche?idAbonne=1&callBack=affect",
+        iframe: true,
+        width: "80%",
+        title: "Utilisateurs",
+        visible: false,
+        height: "80%"
+    }).data("kendoWindow");
+
+    function ChangeAbonne() {
+        var value = this.value();
+        selectedAbonne = value;
+        DsUtilisateur.read();
+    }
+
+    window.addEventListener("message", function (event) {
+        var listesUsers = JSON.parse(event.data);
+        listesUsers = $.map(listesUsers, function(e) {
+            return {
+                lb: e.lb,
+                idCRM: e.id
+            };
+        });
+        var idabonne = drpAbonne.value();
+
+        $.ajax({
+            url: URLROOT + "User/CreateUserFromCRM",
+            type: "POST",
+            data: { idAbonne: idabonne, clients: listesUsers},
+            success: function (data) {
+                if (data.success) {
+
+                }
+            }
+        });
+        DsUtilisateur.read();
+        dialog.close();
+    });
+
+    //function affect(clients) {
+    //    console.log(clients);
+    //}
+</script>
+
+<script>
+
+
+    var DsAbonne = new kendo.data.DataSource({
+        type: "aspnetmvc-ajax",
+        batch: true,
+        transport: {
+            read: {
+                url: URLROOT + "Abonne/ReadAbonne",
+                type: "POST",
+            },
+        },
+        schema: {
+            model: {
+                id: "id",
+                fields: {
+                    id: { type: "number" },
+                    lb: { type: "string" },
+                    idCRM: { type: "number" },
+                }
+            }
+        }
+    });
+
+
+    $("#filesProjet").kendoUpload({
+        async: {
+            saveUrl: URLROOT + "User/SaveFile",
+            autoUpload: true
+        },
+        validation: {
+            allowedExtensions: [".xlsx"]
+        },
+        success: onSuccess,
+    });
+
+    function onSuccess(e) {
+        var users = e.response;
+        var res = "";
+        for (var u in users) {
+            res += "Erreurs à l'importation de l'utilisateur " + u + " :\n";
+            for (var i = 0 ; i < users[u].length ; i++)
+                res += "- " + users[u][i] + "\n";
+        }
+        if (res != "")
+            alert(res);
+    }
+
+    function detailInit(e) {
+        var detailRow = e.detailRow;
+        detailRow.find(".tabstrip").kendoTabStrip({
+            value: "Rôles",
+            contentUrls: [
+            URLROOT + "Role/RoleUs?idu=" + e.data.id
+            ]
+        });
+    }
+
+    function emailTel(e) {
+        return (e.email == null ? "" : e.email + "<br/>") + (e.ext == null ? "" : "Extension: " + e.ext + "<br/>") + (e.tel == null ? "" : e.tel);
+    }
+
+    $("#grid_Utilisateur").kendoGrid({
+        toolbar: [{ name: "create", text: "" },{ name: "save", text: "save" } ,{ name: "projects", text: "Exel" }, { name: "importUsers", text: "Importer utilisateurs" }],
+        dataSource: DsUtilisateur,
+        columns: [
+            {
+                field: "name",
+                Width: "30%",
+                template: "#=civilite != 0 ? DsCivilite.get(civilite).lb : '' #" + " : " + "#=name#",  // Name => Mr : X
+            },
+            {
+                field: "civilite",
+                title: "Civilité",
+                Width: "30%",
+                editor : CiviliteDropDownEditor,
+                hidden: true,
+            },
+            {
+                field: "email",
+                Width: "40%",
+                template: "#=emailTel(data)#"
+            },
+            {
+                field: "password",
+                hidden: true,
+            },
+            {
+                command: [{ name: "edit", text: "" }, { text: "Reset Password", click: changePWD }],
+            },
+        ],
+        detailTemplate: kendo.template($("#templateRU").html()),
+        detailInit: detailInit,
+        editable: {
+            mode: "popup",
+            //template:
+        },
+        edit: function (e) {
+            if (!e.model.isNew()) {
+                $("#password").hide();
+                $("#password").parent().prev(".editor-label").hide();
+            }
+        }
+    });
+
+    //__ Civilité :
+
+    function CiviliteDropDownEditor(container, options) {
+        console.log(container, options, options.model.civilite);
+        var drp = $('<input name="' + options.field + '" />').appendTo(container).kendoDropDownList({
+            dataTextField: "lb",
+            dataValueField: "id",
+            dataSource: DsCivilite,
+            value: options.model.civilite
+        }).data("kendoDropDownList");
+    }
+
+    $(".k-grid-importUsers").click(function () {
+        dialog.refresh(urlCRM + "/Client/ExtRecherche?idAbonne=" + selectedAbonne + "&callBack=affect");
+        dialog.open().center();
+    });
+
+    $(".k-grid-projects").click(function () {
+        $("#filesProjet").click()
+    });
+
+    function changePWD(e) {
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var Id = dataItem.id;
+        $.ajax({
+            type: "POST",
+            url: URLROOT + "User/ChangePwd",
+            data: { userid: Id },
+            success: function (data) {
+                if (data.success) {
+
+                }
+            }
+        });
+
+    };
+
+    var DsRole = new kendo.data.DataSource({
+        type: "aspnetmvc-ajax",
+        batch: true,
+        transport: {
+            read: {
+                url: URLROOT + "Role/ReadR",
+                type: "POST"
+            },
+            create: {   //https://www.telerik.com/forums/success-function-not-firing//
+                url: URLROOT + "Role/CreateR",
+                type: "POST",
+                success: function (data) {
+                    notification.show({ title: "",message : "Success" }, "success");
+                    sleep(3000).then(() => {
+                        location.reload();
+                    });
+                }
+            },
+            update: {
+                url: URLROOT + "Role/UpdateR",
+                type: "POST"
+            },
+            destroy: {
+                url: URLROOT + "Role/DeleteR",
+                type: "POST"
+            }
+        },
+        schema: {
+            model: {
+                id: "id",
+                fields: {
+                    id: { type: "string" },
+                    lb: { type: "string" },
+                    tr: { type: "number" },
+                    users: { editable: false, nullable: false },
+                }
+            }
+        }
+    });
+
+    $("#gridRoleCreate").kendoGrid({
+        dataSource: DsRole,
+        toolbar: ["create", "save", "cancel"],
+        columns: [{
+            field: "lb",
+        },
+            {
+                field: "users",
+                template: "#=listuser(users)#"
+
+            },{ command: [{ name: "destroy", text: "" }], title: "&nbsp;", width: "100px" }
+        ],
+        editable: "incell",
+        dataBinding: function(){
+            console.log('dataBinding');
+            var grid = $("#gridRoleCreate").data("kendoGrid");
+            grid.tbody.find(".k-command-cell").css("padding-left","5%");
+        },
+    });
+
+    setTimeout(function(e){
+
+        
+
+    },500);
+
+</script>
+
+<script>
+
+
+
+    function onEditUser(e) {
+        if (!e.model.isNew()) {
+            $("#password").hide();
+            $("#password").parent().prev(".editor-label").hide();
+        }
+    }
+
+    /* Pour récuperer la liste des utilisateurs dans une balise <li></li> */
+    function listuser(data) {
+        var res = "";
+        if (data != null) {
+            res += "<ul>";
+            for (var i = 0 ; i < data.length; i++) {
+                // On fait appel a la fonction selectuser()
+                res += "<li Onclick='selectuser(\"" + data[i] + "\")'>" + data[i] + "</li>"
+            }
+            res += "</ul>";
+        }
+        return res;
+    }
+
+    // C'est pour filtrer dans la grid les utilisateurs lorsqu'on selectionne un utilisateur //
+    function selectuser(name) {
+        $("#grid_Utilisateur").data("kendoGrid").dataSource.filter({ field: "name", operator: "eq", value: name })
+    }
+
+</script>

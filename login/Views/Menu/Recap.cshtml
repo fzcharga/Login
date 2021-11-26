@@ -1,0 +1,252 @@
+﻿
+@{
+    ViewBag.Title = "Recap";
+}
+
+<style>
+    .user-item, .role-item {
+        padding: 5px;
+        cursor: pointer;
+    }
+
+        .user-item:not(:last-child) {
+            border-bottom: 1px solid rgb(66, 139, 202);
+        }
+
+        .user-item:hover, .role-item:hover {
+            background-color: rgb(108, 153, 209);
+        }
+
+    .role-item {
+        border: 1px solid rgb(108, 153, 209);
+        border-radius: 3px;
+        display: inline-block;
+        margin-right: 5px;
+        margin-bottom: 5px;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-2">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                Utilisateurs
+            </div>
+            <div class="panel-body" style="padding: 0;">
+                <div id="lvUsers"></div>
+            </div>
+        </div>
+        @*<div class="panel panel-primary">
+                <div class="panel-body" style="padding: 0;">
+                    <div class="panel-heading">
+                        Depense
+                    </div>
+                    <div id="Depense"></div>
+                </div>
+            </div>*@
+        <div class="col-md-10">
+            <div id="lvRoles"></div>
+            <div id="dgMenu"></div>
+        </div>
+    </div>
+</div>
+
+<script id="tmpUser" type="text/x-kendo-template">
+    <div class="user-item" onclick="refreshRoles('#:id#')">
+        #:lb#
+    </div>
+</script>
+
+<script id="tmpRole" type="text/x-kendo-template">
+    <span class="role-item" onclick="refreshMenu('#:id#')">
+        #:name#
+    </span>
+</script>
+@*<script id="tmpDepense" type="text/x-kendo-template">
+        <span class="Depense-item" onclick="refreshMenu('#:id#')">
+            #:id#
+        </span>
+    </script>*@
+
+<script>
+
+    var lvUsers = $("#lvUsers").kendoListView({
+        dataSource: usersDS,
+        template: kendo.template($("#tmpUser").html()),
+        selectable: true,
+    }).data("kendoListView");
+
+    //var DsRoles = new kendo.data.DataSource({
+    //    transport: {
+    //        read: {
+    //            async: false,
+    //            url: URLROOT + "Role/ReadRoleByUser",
+    //            type: "POST"
+    //        }
+    //    }
+    //});
+
+    //var Depense = $("#Depense").kendoListView({
+    //    dataSource: DsDenpense,
+    //    template: kendo.template($("#tmpDepense").html()),
+    //    selectable: true,
+    //}).data("kendoListView");
+    //function refreshDepense(id) {
+    //    DsDepense.read({ id: id });
+    //    data = DsMenuRoles.data();
+    //    createDiagram();
+    //    DsRoles.read({ userId: id });
+    //}
+
+    var DsRoles = new kendo.data.DataSource({
+        transport: {
+            read: {
+                async: false,
+                url: URLROOT + "Role/ReadRoleByUser",
+                type: "POST"
+            }
+        }
+    });
+
+    var lvRoles = $("#lvRoles").kendoListView({
+        autoBind: false,
+        dataSource: DsRoles,
+        template: kendo.template($("#tmpRole").html()),
+        selectable: true,
+    }).data("kendoListView");
+
+    function refreshRoles(id) {
+        DsMenuRoles.read({ userId: id });
+        data = DsMenuRoles.data();
+        createDiagram();
+        DsRoles.read({ userId: id });
+    }
+</script>
+
+<script>
+
+    function Topdf() {
+        var diagram = $("#dgMenu").getKendoDiagram();
+        diagram.exportPDF({ paperSize: "auto", margin: { left: "1cm", top: "1cm", right: "1cm", bottom: "1cm" } }).done(function (data) {
+            kendo.saveAs({
+                dataURI: data,
+                fileName: "Menu.pdf",
+            });
+        });
+    }
+
+    $(".body-content").removeClass("container").addClass("container-fluid");
+
+    var DsMenuRoles = new kendo.data.DataSource({
+        transport: {
+            read: {
+                async: false,
+                url: URLROOT + "Menu/ReadMenuByRole",
+                type: "POST",
+            }
+        }
+    });
+
+    var data = [];
+
+    function refreshMenu(id) {
+        DsMenuRoles.read({ roleId: id });
+        data = DsMenuRoles.data();
+        createDiagram();
+    }
+
+    var data = [{
+        text: "Antonio",
+        url: "Team Lead",
+        title: "Design Lead",
+        items: [{
+            text: "Elizabeth",
+            url: "Design Lead",
+            title: "Design Lead",
+            items: [{
+                text: "Ann",
+                url: "UI Designer",
+                title: "Design Lead",
+            }]
+        }, {
+            text: "Diego",
+            url: "QA Engineer",
+            title: "Design Lead",
+            items: [{
+                text: "Fran",
+                url: "QA Intern",
+                title: "Design Lead",
+            }]
+        }, {
+            text: "Felipe",
+            url: "Senior Developer",
+            title: "Design Lead",
+            items: [{
+                text: "Daniel",
+                url: "Developer",
+                title: "Design Lead",
+            }]
+        }]
+    }];
+
+    function visualTemplate(options) {
+        var dataviz = kendo.dataviz;
+        var g = new dataviz.diagram.Group();
+        var dataItem = options.dataItem;
+
+        g.drawingElement.options.tooltip = {
+            content: dataItem.title + "<br />" + dataItem.url,
+            shared: true
+        };
+
+        g.append(new dataviz.diagram.Rectangle({
+            width: 80,
+            height: 70,
+            stroke: {
+                width: 1,
+                color: "#000"
+            },
+            fill: {
+                color: dataItem.fillColor
+            }
+        }));
+
+        g.append(new dataviz.diagram.TextBlock({
+            text: dataItem.text,
+            x: 5,
+            y: 25,
+            fill: "#fff",
+            width: 65
+        }));
+
+        return g;
+    }
+
+    function createDiagram() {
+        $("#dgMenu").kendoDiagram({
+            dataSource: new kendo.data.HierarchicalDataSource({
+                data: data,
+                schema: {
+                    model: {
+                        children: "items"
+                    }
+                }
+            }),
+            layout: {
+                type: "layered"
+            },
+            shapeDefaults: {
+                visual: visualTemplate
+            },
+            connectionDefaults: {
+                stroke: {
+                    color: "#979797",
+                    width: 2
+                }
+            }
+        });
+
+        var diagram = $("#dgMenu").getKendoDiagram();
+        diagram.bringIntoView(diagram.shapes);
+    }
+</script>

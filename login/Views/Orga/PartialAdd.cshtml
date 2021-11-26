@@ -1,0 +1,61 @@
+@model login.Models.ModelSuperieur
+
+@Html.HiddenFor(m => m.id)
+@Html.HiddenFor(m => m.sup)
+
+<label for="txtTempl">Template</label>
+<div id="cmbTmpl" class="txt" style="max-width: 280px;min-width: 80px;width: 100%;"></div>
+<button id="btnEnrg" class='btn btn-success enrg' onclick="enregister()">Enregistrer</button>
+
+    <script>
+
+
+        $("#id").val("@ViewBag.idu");
+        $("#sup").val("@ViewBag.ids");
+
+    $("#CmbUser").kendoComboBox({
+        dataTextField: "lb",
+        dataValueField: "id",
+        height: 200,
+        autoBind: false,
+        filter: "contains",
+        suggest: true,
+        template: '<div class="employe-photo" style="background-image: url(/PJ/Users/#:id#-small.jpg);height: 45px;width: 45px;margin: 2px;"><span style="margin-left: 50px;margin-top: 150px;">#:lb#</span></div>',
+        minLength: 1,
+        select: onSelectU,
+        dataSource: userDS
+    });
+
+
+    function onSelectU()
+    {
+        var dataItem = this.dataItem(e.item.index());
+
+        if ("@ViewBag.idu" != "")
+        {
+            $("#id").val(dataItem.id);
+        }
+        else if (@ViewBag.ids != ""){
+            $("#sup").val(dataItem.id);
+        }
+            
+    }
+
+    function enregister()
+    {
+        kendo.ui.progress($("#WindowProc"), true);
+        var m = {
+            id: $("#id").val(),
+            sup: $("#sup").val(),
+            org: 1,
+            etat: 4,
+        }
+        $.ajax({
+            url: URLROOT + "Orga/CreateOrga",
+            type: "POST",
+            data: JSON.stringify({ m: m }),
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8'
+        });
+    }
+    </script>

@@ -1,0 +1,39 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Mes login et mot de passe</h2>
+
+<div id="gridApplications"></div>
+
+<script>
+
+    DsApplications.read();
+
+    function editorName(container, options) {
+        var ids = $.map(DsApplicationsUsers.data(), function (e) { return e.id });
+        DsApplications.filter({ operator: function (data) { return ids.indexOf(data.id) == -1; } });
+
+        $('<input name="' + options.field + '" style="width: 100%;" />').appendTo(container).kendoDropDownList({
+            dataSource: DsApplications,
+            dataTextField: "name",
+            dataValueField: "id"
+        });
+    }
+
+    var gridApplications = $("#gridApplications").kendoGrid({
+        toolbar: ["create", "save", "cancel"],
+        dataSource: DsApplicationsUsers,
+        columns: [
+            { field: "idApp", title: "Nom", editor: editorName, template: "#var t = DsApplications.get(idApp);# #:t != null ? t.name : ''#" },
+            { field: "login", title: "Login" },
+            { field: "password", title: "Password" },
+            { field: "urlStart", title: "Url de demarrage" },
+            { command: "destroy", title: "&nbsp;", width: 150 },
+
+        ],
+        editable: "incell"
+    }).data("kendoGrid");
+
+</script>

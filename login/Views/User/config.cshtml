@@ -1,0 +1,379 @@
+
+
+<link rel="stylesheet" href="../cropper/cropper.css">
+<script src="../cropper/cropper.js"></script>
+<style>
+
+
+   
+    .label {
+        cursor: pointer;
+    }
+
+    .progress {
+        display: none;
+        margin-bottom: 1rem;
+    }
+
+    .alert {
+        display: none;
+    }
+
+    .img-container img {
+        max-width: 100%;
+    }
+
+
+
+    #gridAlimentation .k-icon {
+        margin: 0;
+    }
+
+    .list-alimentation {
+        position: absolute;
+        right: 12px;
+        top: 12px;
+        cursor: pointer;
+    }
+
+    #openChart {
+        position: absolute;
+        right: 40px;
+        top: 12px;
+        cursor: pointer;
+    }
+
+        #openChart:hover {
+            margin-top: 2px;
+        }
+
+    #btnShowAll {
+        position: relative;
+        left: 5%;
+    }
+
+    /*.form-item {
+            padding-left: 10px;
+        }*/
+
+    #logoOfWindow {
+        height: 40px;
+        margin-top: 2%;
+        margin-bottom: 5%;
+    }
+
+    #wndStatistiques {
+        text-align: center;
+    }
+
+    #logoTitelWindow {
+        margin-bottom: 0;
+        margin-top: 0;
+        width: 60px;
+    }
+
+    #labelTitelWnd {
+        position: relative;
+        left: 1%;
+    }
+
+    .k-datepicker {
+        padding-left: 0 !important;
+    }
+
+    /*#drpChildren, #drpParent {
+            max-width: 20% !important;
+            text-align: center !important;
+        }*/
+</style>
+<div class="col-md-12 col-sm-12" style="position: relative;display: contents;">
+    <br />
+    <br />
+    <br />
+
+
+</div>
+
+<div class="panel panel-primary">
+    <div class="panel-heading" style="position: relative;"><span class="title-heading classFont-Family">Mon Compte</span></div>
+    <div class="panel-body">
+        <div id="content-add">
+            <div class="form-group">
+                <input id="FullName" class="form-item classFont-Family claims" type="text" min="1" placeholder="Nom complet" title="Nom complet" value="@ViewBag.FullName" @*style="max-width: 300px;width: 100%;"*@ />
+            </div>
+            <div class="form-group">
+                <label class="label" data-toggle="tooltip" title="Change your avatar">
+                    <img class="rounded" id="avatar" src="~/PJ/Avatar/@ViewBag.img" alt="avatar">
+                    <input type="file" class="sr-only" id="input" name="image" accept="image/*">
+                </label>
+
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                </div>
+                <div class="alert" role="alert"></div>
+                <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalLabel">
+                                    créer un avatar
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="img-container">
+                                    <img id="image" src="https://avatars0.githubusercontent.com/u/3456749">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                <button type="button" class="btn btn-primary" id="crop">Enregistrer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="form-group">
+                <button class="btn btn-primary form-item-btn classFont-Family" id="btnAddAlimentation" onclick="saveprofile()">Enregistrer</button>
+            </div>
+        </div>
+        <div id="content-grid" style="display: none;">
+            <div id="gridAlimentation"></div>
+        </div>
+    </div>
+</div>
+
+
+<div class="panel panel-primary">
+    <div class="panel-heading" style="position: relative;"><span class="title-heading classFont-Family">Changer Mot de passe</span></div>
+    <div class="panel-body" id="validpass">
+
+        <div id="content-add">
+            <div class="form-group">
+                <input id="oldpasse" autocomplete="new-password" type="password" name="oldpasse" data-mintextlength="6" class="form-item classFont-Family " type="text" placeholder="Mot de passe acctuel" title="aloooo" @*style="max-width: 300px;width: 100%;"*@ required="required" />
+            </div>
+            <div class="form-group">
+                <input id="newpasse" type="password" name="newpasse" data-mintextlength="6" class="form-item classFont-Family" type="text" min="6" placeholder="Nouveau Mot de passe" title="Nouveau Mot de passe" @*style="max-width: 300px;width: 100%;"*@ required="required" />
+            </div>
+            <div class="form-group">
+                <input id="confirmpasse" type="password" name="confirmpasse" data-mintextlength="6" class="form-item classFont-Family" type="text" min="6" placeholder="Confirmation Mot de passe" title="Confirmation Mot de passe" data-val-equalto-other="*.newpasse" equalto="The new password and confirmation password do not match." required="required" />
+            </div>
+            <div class="form-group">
+
+                <button type="submit" class="btn btn-primary form-item-btn classFont-Family" id="btnAddAlimentation" onclick="save()">Enregistrer</button>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+<script>
+    window.addEventListener('DOMContentLoaded', function () {
+        var avatar = document.getElementById('avatar');
+        var image = document.getElementById('image');
+        var input = document.getElementById('input');
+        var $progress = $('.progress');
+        var $progressBar = $('.progress-bar');
+        var $alert = $('.alert');
+        var $modal = $('#modal');
+        var cropper;
+
+        $('[data-toggle="tooltip"]').tooltip();
+
+        input.addEventListener('change', function (e) {
+            var files = e.target.files;
+            var done = function (url) {
+                input.value = '';
+                image.src = url;
+                $alert.hide();
+                $modal.modal('show');
+            };
+            var reader;
+            var file;
+            var url;
+
+            if (files && files.length > 0) {
+                file = files[0];
+
+                if (URL) {
+                    done(URL.createObjectURL(file));
+                } else if (FileReader) {
+                    reader = new FileReader();
+                    reader.onload = function (e) {
+                        done(reader.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
+
+        $modal.on('shown.bs.modal', function () {
+            cropper = new Cropper(image, {
+                aspectRatio: 1,
+                viewMode: 3,
+            });
+        }).on('hidden.bs.modal', function () {
+            cropper.destroy();
+            cropper = null;
+        });
+
+        document.getElementById('crop').addEventListener('click', function () {
+            var initialAvatarURL;
+            var canvas;
+
+            $modal.modal('hide');
+
+            if (cropper) {
+                canvas = cropper.getCroppedCanvas({
+                    width: 160,
+                    height: 160,
+                });
+                initialAvatarURL = avatar.src;
+                avatar.src = canvas.toDataURL();
+                $progress.show();
+                $alert.removeClass('alert-success alert-warning');
+                canvas.toBlob(function (blob) {
+                    var formData = new FormData();
+
+                    formData.append('avatar', blob, 'avatar.jpg');
+                    $.ajax(URLROOT + 'user/avatar_Save', {
+                        method: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+
+                        xhr: function () {
+                            var xhr = new XMLHttpRequest();
+
+                            xhr.upload.onprogress = function (e) {
+                                var percent = '0';
+                                var percentage = '0%';
+
+                                if (e.lengthComputable) {
+                                    percent = Math.round((e.loaded / e.total) * 100);
+                                    percentage = percent + '%';
+                                    $progressBar.width(percentage).attr('aria-valuenow', percent).text(percentage);
+                                }
+                            };
+
+                            return xhr;
+                        },
+
+                        success: function () {
+                            $alert.show().addClass('alert-success').text('Upload success');
+                        },
+
+                        error: function () {
+                            avatar.src = initialAvatarURL;
+                            $alert.show().addClass('alert-warning').text('Upload error');
+                        },
+
+                        complete: function () {
+                            $progress.hide();
+                        },
+                    });
+                });
+            }
+        });
+    });
+</script>
+
+
+
+<script>
+
+
+
+    var validator = $("#validpass").kendoValidator(
+        {
+            errorTemplate: "<br/><span>#=message#</span>",
+            rules: {
+                verifyPasswords: function (input) {
+                    var ret = true;
+                    console.log(input.is("[name=confirmpasse]"));
+                    if (input.is("[name=confirmpasse]")) {
+                        ret = input.val() === $("#newpasse").val();
+                    }
+                    return ret;
+                },
+                minTextLength: function (input) {
+                    console.log(input.is('[data-mintextlength]'));
+                    if (input.is("[data-mintextlength]") && input.val() !== "") {
+                        var minlength = input.attr("data-mintextlength");
+
+                        var value = input.val();
+                        console.log(minlength);
+                        console.log(value.length);
+
+                        return minlength <= value.length;
+                    }
+                    return true;
+                }
+            },
+            messages: {
+                verifyPasswords: "Les mots de passe ne correspondent pas!",
+                minTextLength: "minimum 6 caractères requis"
+
+            }
+        }
+
+    ).data("kendoValidator");
+
+    function save() {
+
+        if (validator.validate()) {
+            alert("Employee Saved");
+
+            $.ajax({
+                type: "POST",
+                //url: URLROOT + "login/getSolde",
+                url: URLROOT + "user/ChangePassword",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify({ OldPassword: $("#oldpasse").val(), NewPassword: $("#newpasse").val(), ConfirmPassword: $("#confirmpasse").val() }),
+                success: function (Res) {
+                    if (Res.message === "ok")
+                        window.location = URLROOT + "Account/LogOff";
+                    else
+                        alert(Res.message);
+
+                }
+            });
+        }
+    }
+
+
+
+    function saveprofile() {
+        var ListClaim = [];
+        //var claimsObj = {};
+        var claimsobjhtml = $('.claims').each(function () {
+            //claimsObj[this.id] = this.value;
+            ListClaim.push({ name: this.id, value: this.value });
+
+
+        });
+
+        $.ajax({
+            type: "POST",
+            //url: URLROOT + "login/getSolde",
+            url: URLROOT + "user/SetclaimUser",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify({ claims: ListClaim }),
+            success: function (Res) {
+                //$("#lbSolde").text(Res);
+                window.location = URLROOT + "Account/LogOff";
+            }
+        });
+    }
+
+
+
+</script>

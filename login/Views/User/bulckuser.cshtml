@@ -1,0 +1,99 @@
+﻿
+
+<span id="coller">Clickez ici puis sur ctrl V</span>
+
+
+<div id="grid" tabindex="0"></div>
+
+
+
+
+<script>
+
+
+    var dataSource = new kendo.data.DataSource({
+        schema: {
+            model: {
+                id: "id",
+                fields: {
+                    id: {
+                        editable: false
+                    },
+                    nom: { validation: { required: true } },
+                    prenom: { validation: { required: true } },
+                    telephone: { validation: { required: true } },
+                }
+            }
+        },
+        batch: true,
+        data: [],
+    })
+
+    var gridF = $("#grid").kendoGrid({
+        editable: true,
+        height: 550,
+        toolbar: ["create", "save", "cancel"],
+        dataSource: dataSource,
+        navigatable: true,
+        columns: [
+            { field: "nom" },
+            { field: "prenom" },
+            { field : "telephone"}
+        ],
+    })
+
+
+
+    $("#coller").on('click', function (e) {
+        console.log("coller");
+        // Get the position of the Grid.
+        var offset = $(this).offset();
+        // Create a textarea element which will act as a clipboard.
+        var textarea = $("<textarea>");
+        // Position the textarea on top of the Grid and make it transparent.
+        textarea.css({
+            position: 'absolute',
+            opacity: 0,
+            top: offset.top,
+            left: offset.left,
+            border: 'none',
+            width: $(this).width(),
+            height: $(this).height()
+        })
+            .appendTo('body')
+            .on('paste', function () {
+                // Handle the paste event.
+                setTimeout(function () {
+                    // The pasted content.
+                    var value = $.trim(textarea.val());
+                    // Get instance to the Grid.
+                    var grid = $("#grid").data("kendoGrid");
+                    // Get the pasted rows - split the text by new line.
+                    var rows = value.split('\n');
+
+                    var data = [];
+
+                    for (var i = 0; i < rows.length; i++) {
+                        var cells = rows[i].split('\t');
+                        dataSource.insert({
+                           
+                            nom :cells[0],
+                            prenom: cells[1],
+                            telephone: cells[2],
+                           // dirty: true
+                        });
+                    };
+                  //  grid.dataSource.data(data);
+                });
+            }).on('focusout', function () {
+                // Remove the textarea when it loses focus.
+                $(this).remove();
+            });
+        // Focus the textarea.
+        setTimeout(function () {
+            textarea.focus();
+        });
+    });
+
+   
+</script>

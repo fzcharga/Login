@@ -1,0 +1,395 @@
+﻿<span class="shapeItem" data-shape='{"type":"circle","width":120,"height":120}' style="background-position: -60px 0"></span>
+<span>Circle</span>
+                        </li>
+<li>
+    <span class="shapeItem" data-shape='{"width":120,"height":80,"type":"rectangle"}' style="background-position: -120px 0"></span>
+    <span>Rectangle</span>
+</li>
+<li>
+    <span class="shapeItem" data-shape='{"type":"circle","width":120,"height":80}' style="background-position: -180px 0"></span>
+    <span>Ellipse</span>
+</li>
+                    </ul>
+                </li>
+<li>
+    Polygons
+    <ul>
+        <li>
+            <span class="shapeItem" data-shape='{"path":"M 60,0 L120,44 L97,114 L23,114 L0,44 z"}' style="background-position: -240px 0"></span>
+            <span>Pentagon</span>
+        </li>
+        <li>
+            <span class="shapeItem" data-shape='{"path":"m30,0 L90,0 L120,52 L90,104 L30,104 L0,52 z"}' style="background-position: -300px 0"></span>
+            <span>Hexagon</span>
+        </li>
+        <li>
+            <span class="shapeItem" data-shape='{"path":"m60,0 L108.12,23.17 L120,75.24 L86.7,116.99 L33.3,116.99 L0,75.24 L11.88,23.17 z"}' style="background-position: -360px 0"></span>
+            <span>Heptagon</span>
+        </li>
+        <li>
+            <span class="shapeItem" data-shape='{"path":"m35.15,0 L84.85,0 L120,35.15 L120,84.85 L84.85,120 L35.15,120 L0,84.85 L0,35.15 z"}' style="background-position: -420px 0"></span>
+            <span>Octagon</span>
+        </li>
+    </ul>
+</li>
+<li>
+    Arrows
+    <ul>
+        <li>
+            <span class="shapeItem" data-shape='{"path":"m0,20 L20,0 L20,10 L120,10 L120,30 L20,30 L20,40 z"}' style="background-position: -480px 0"></span>
+            <span>45 degree</span>
+        </li>
+        <li>
+            <span class="shapeItem" data-shape='{"path":"m0,20 L11.5,0 L11.5,10 L120,10 L120,31 L11.5,31 L11.5,40 z"}' style="background-position: -540px 0"></span>
+            <span>60 degree</span>
+        </li>
+    </ul>
+
+
+    @*<script>
+        $("#diagram").kendoDropTarget({
+            drop: function (e) {
+
+                var item, pos, transformed;
+                if (e.draggable.hint) {
+                    item = e.draggable.hint.data("shape");
+                    pos = e.draggable.hintOffset;
+                    pos = new Point(pos.left, pos.top);
+                    var transformed = diagram.documentToModel(pos);
+                    item.x = transformed.x;
+                    item.y = transformed.y;
+                    var textdiag =  "anass test 33 44 kjhkjh kjh kjh kh Target %";
+                    //item.content = { text: "anass test 33 44 kjhkjh kjh kjh kh Target %", align: "center" };
+                    //var width = getTextWidth(item.content.text, 11);
+                    //  TC(item.width + " " + width);
+                    //   item.width = width;
+                    var shape = new kendo.dataviz.diagram.Shape(item);
+
+                    var texts = textdiag.split(" ");
+                    for (var i = 0; i < texts.length; i++) {
+                        var tb = new kendo.dataviz.diagram.TextBlock({
+                            text: texts[i],
+                            //y: i*11,
+                        });
+                        shape.visual.append(tb);
+                    }
+                    //var tb = new kendo.dataviz.diagram.TextBlock({
+                    //    text: "demande de creation modification",
+                    //    //x: 30,
+                    //    y: 50,
+                    //    color: "red",
+                    //    fontSize: 30,
+                    //    width: 160,
+                    //    //height:120
+
+                    //});
+
+                    diagram.addShape(shape);
+                    onclik();
+                }
+    </script>*@
+
+  
+
+<script src="~/Scripts/Test/kendo.all.min.js"></script>
+
+    <div id="splitter">
+        <div id="left-pane">
+            <div class="pane-content">
+                <ul id="shapesPanelBar">
+
+                    <li>
+                        <div id="square" class="shapeItem" data-shape='{"width":120,"height":120,"type":"rectangle"}' style="background-position: 0 0"></div>
+                    </li>
+                    <li>
+                        <div id="circle" class="shapeItem" data-shape='{"type":"circle"}' style="background-position: -60px 0;word-wrap: break-word;"></div>
+                    </li>
+                   
+                    <li>
+                        <span id="jgjhggh" class="shapeItem" data-shape='{"path":"m30,0 l90,0 l120,52 l90,104 l30,104 l0,52 z"}' style="background-position: -300px 0"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div id="center-pane">
+        <div class="pane-content">
+            <div id="diagram"></div>
+        </div>
+    </div>
+    <script>
+
+        $(function () {
+            var Shape = kendo.dataviz.diagram.Shape,
+                Connection = kendo.dataviz.diagram.Connection,
+                Rect = kendo.dataviz.diagram.Rect,
+                Point = kendo.dataviz.diagram.Point,
+                selected;
+
+            var diagram = $("#diagram").kendoDiagram({
+                dataSource: {
+                    data: [{}],
+                    schema: {
+                        model: {
+                            children: "items"
+                        }
+                    }
+                },
+                layout: {
+                    type: "tree",
+                    subtype: "right"
+                },
+            }).getKendoDiagram();
+
+            $("#shapesPanelBar .shapeItem").kendoDraggable({
+                hint: function (e) {
+                    return this.element.clone();
+                }
+            });
+
+            $("#diagram").kendoDropTarget({
+                drop: function (e) {
+
+                    var item, pos, transformed;
+                    if (e.draggable.hint) {
+                        item = e.draggable.hint.data("shape");
+                        pos = e.draggable.hintOffset;
+                        pos = new Point(pos.left, pos.top);
+                        var transformed = diagram.documentToModel(pos);
+                        item.x = transformed.x;
+                        item.y = transformed.y;
+                        var textdiag = "anass test 33 44 kjhkjh kjh kjh kh Target %"; //window.prompt("sometext","defaultText");
+                        var shape = new kendo.dataviz.diagram.Shape(item);
+                        var a = new kendo.dataviz.diagram.Rect(item.x, item.y, 120, 120);
+                        var layout = new kendo.dataviz.diagram.Layout(a, {
+                            alignContent: "center",
+                            justifyContent: "center",
+                            spacing: 3
+                        });
+                        shape.visual
+                        shape.visual.append(layout);
+                        var texts = textdiag.split(" ");
+                        for (var i = 0; i < texts.length; i++) {
+                            layout.append(new kendo.dataviz.diagram.TextBlock({
+                                text: texts[i]
+                            }));
+                        }
+                        layout.reflow();
+                        diagram.addShape(shape);
+                        onclik();
+                    }
+                }
+            });
+        });
+
+
+    </script>
+    <style>
+        .shapeItem {
+            margin-top: 10px;
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            background-image: url("../images/diagram-toolbox.png");
+            background-size: auto 100%;
+        }
+
+        #square {
+            width: 50px;
+            height: 50px;
+            background: red;
+        }
+
+        #circle {
+            width: 50px;
+            height: 50px;
+            background: red;
+            -moz-border-radius: 50px;
+            -webkit-border-radius: 50px;
+            border-radius: 50px;
+        }
+
+        #shapesPanelBar .shapeItem {
+            display: inline-block;
+        }
+    </style>
+
+
+@*<input type="text" id="color" />
+
+<div id="item">
+    <div class="header">Ref-2378</div>
+    <div class="tri1"></div>
+    <div class="tri2"></div>
+    <div class="body">
+        <div class="bodychild">
+            <p>Pointeuse (Att3000) - Comment visualiser l'absence des employés au niveau de la pointeuse</p>
+        </div>
+    </div>
+    <div class="tri3"></div>
+    <div class="tri4"></div>
+    <div class="footer">Developpement</div>
+</div>
+
+<div class="parallelogramme"></div>
+<style>
+    .parallelogramme{
+	width:300px;
+	height:100px;
+	background:#069;
+	-webkit-transform:skew(30deg);
+	-moz-transform:skew(30deg);
+	-o-transform:skew(30deg);
+	tranform:skew(30deg);
+}
+</style>
+
+<script>
+
+    function getGradientColor(start_color, end_color, percent) {
+        // strip the leading # if it's there
+        start_color = start_color.replace(/^\s*#|\s*$/g, '');
+        end_color = end_color.replace(/^\s*#|\s*$/g, '');
+
+        // convert 3 char codes --> 6, e.g. `E0F` --> `EE00FF`
+        if (start_color.length == 3) {
+            start_color = start_color.replace(/(.)/g, '$1$1');
+        }
+
+        if (end_color.length == 3) {
+            end_color = end_color.replace(/(.)/g, '$1$1');
+        }
+
+        // get colors
+        var start_red = parseInt(start_color.substr(0, 2), 16),
+            start_green = parseInt(start_color.substr(2, 2), 16),
+            start_blue = parseInt(start_color.substr(4, 2), 16);
+
+        var end_red = parseInt(end_color.substr(0, 2), 16),
+            end_green = parseInt(end_color.substr(2, 2), 16),
+            end_blue = parseInt(end_color.substr(4, 2), 16);
+
+        // calculate new color
+        var diff_red = end_red - start_red;
+        var diff_green = end_green - start_green;
+        var diff_blue = end_blue - start_blue;
+
+        diff_red = ((diff_red * percent) + start_red).toString(16).split('.')[0];
+        diff_green = ((diff_green * percent) + start_green).toString(16).split('.')[0];
+        diff_blue = ((diff_blue * percent) + start_blue).toString(16).split('.')[0];
+
+        // ensure 2 digits by color
+        if (diff_red.length == 1)
+            diff_red = '0' + diff_red
+
+        if (diff_green.length == 1)
+            diff_green = '0' + diff_green
+
+        if (diff_blue.length == 1)
+            diff_blue = '0' + diff_blue
+
+        return '#' + diff_red + diff_green + diff_blue;
+    };
+
+    $("#color").keypress(function (e) {
+        if (e.which == 13) {
+            var txt = $("#color").val();
+            $(".header").css("background-color", getGradientColor(txt, '#333333', 0));
+            $(".footer").css("background-color", getGradientColor(txt, '#333333', 0.4));
+            //$(".body").css("border-right-color", getGradientColor(txt, '#333333', 0));
+            //$(".body").css("border-left-color", getGradientColor(txt, '#333333', 0.4));
+
+            $(".tri1").css("border-color", "transparent " + getGradientColor(txt, '#333333', 0.2));
+            $(".tri2").css("border-color", getGradientColor(txt, '#333333', 0.2) + " transparent transparent");
+            $(".tri3").css("border-color", "transparent transparent " + getGradientColor(txt, '#333333', 0.6));
+            $(".tri4").css("border-color", "transparent transparent transparent " + getGradientColor(txt, '#333333', 0.6));
+        }
+    });
+   
+
+</script>
+
+<style>
+    #item{
+        width:280px;
+        text-align: center;
+    }
+
+    .header{
+        border-radius:5px;
+         background-color:#3f86e8;
+         color:white;
+         border-radius: 5px 5px 0 0;
+         height:23px;
+    }
+    .body {
+        border-right: 2px  solid gray;
+        border-left: 2px solid gray;
+        border-top: 2px none;
+        border-bottom: 2px none;
+        height: 114px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 266px;
+        box-shadow: 0px 0px 4px 1px rgba(119, 119, 119, 0.6);
+        -moz-box-shadow: 0px 0px 4px 1px rgba(119, 119, 119, 0.6);
+        -webkit-box-shadow: 0px 0px 4px 1px rgba(119, 119, 119, 0.6);
+    }
+    .bodychild{
+        display: table;
+        height: 100%;
+    }
+    .bodychild p {
+        display: table-cell;
+            vertical-align: middle;
+            padding: 10px;
+    }
+    .footer{
+    background-color:#2d47e1;
+     border-radius:5px;
+     color:white;
+     border-radius:  0 0 5px 5px;
+     height:23px;
+    }
+
+    .tri1 {
+        border-color: transparent #0264d0;
+    border-style: solid;
+    border-width: 0 8px 8px 0;
+    float: left;
+    height: 0;
+    left: 1px;
+    width: 0;
+    }
+    .tri2 {
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 8px 8px 0 0;
+        border-color: #0264d0 transparent transparent;
+        float: right;
+        right: 1px;
+    }
+    .tri3 {
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 0 0 8px 8px;
+        border-color: transparent transparent #004a9d;
+        float: left;
+        left: 0px;
+         position: relative;
+    top: -7px;
+    }
+    .tri4 {
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 8px 0 0 8px;
+        border-color: transparent transparent transparent #004a9d;
+        float: right;
+        right: 0px;
+        position: relative;
+        top: -7px;
+    }
+</style>*@

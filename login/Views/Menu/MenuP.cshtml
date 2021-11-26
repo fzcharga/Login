@@ -1,0 +1,7 @@
+﻿<ul id="menuP"></ul>
+<input type="hidden" value="@HttpContext.Current.Items["MenuTitle"]" class="hidenTitle"/>
+<script>
+    @* var textTitre = "@HttpContext.Current.Items["MenuTitle"]"; *@
+    var textTitre = $(".hidenTitle").val();
+    $("#titleMenu").text(textTitre);
+</script>

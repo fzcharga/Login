@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2019.1.220/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2019.1.220/styles/kendo.fiori.min.css" />
+
+    <link rel="stylesheet" href="@Url.Content("~/Content/Site.css?v=1.4")" />
+
+    <link href="/Content/widget1.css" rel="stylesheet" />
+    <script src="http://kendo.cdn.telerik.com/2019.1.220/js/jquery.min.js"></script>
+    <script src="http://kendo.cdn.telerik.com/2019.1.220/js/kendo.all.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2019.1.220/js/cultures/kendo.culture.fr-FR.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2019.1.220/js/messages/kendo.messages.fr-FR.min.js"></script>
+    <script src="http://kendo.cdn.telerik.com/2019.1.220/js/jszip.min.js"></script>
+    <script src="@Url.Content("~/Scripts/backstretch.min.js")"></script>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <script src="/Scripts/ExtendsWidgets.js"></script>
+    <script src="@Url.Content("~/Scripts/jquery-form.js")"></script>
+    <script>
+        var URLROOT = "@Url.Content("~/")";
+        kendo.culture("fr-FR");
+    </script>
+
+    <script src="@Url.Content("~/Scripts/appmedia751.js")"></script>
+
+    <style>
+       
+        .employe-photo {
+            display: inline-block;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background-size: 100% 100%;
+            background-position: center center;
+            vertical-align: middle;
+            line-height: 32px;
+            box-shadow: inset 0 0 1px #999, inset 0 0 10px rgba(0,0,0,.2);
+            margin-left: 5px;
+        }   
+
+        /*#contentSolde {
+            position: relative;
+            color: white;
+            border-radius: 0px 40px 40px 40px;
+            text-align: center;
+            background-image: linear-gradient(to right,#273491, #5089c8);
+            display: inline-flex;
+            padding: 5px;
+            right: 20%;
+            float: right;
+            margin: 5px;
+        }
+
+        #lbSolde {
+            font-family: sans-serif;
+            font-size: 30px;
+            font-weight: inherit;
+            color: #fb16ce;
+        }
+
+        #txtSolde {
+            padding-right: 10px;
+            padding-top: 15px;
+            padding-left: 10px;
+            opacity: 0.7;
+        }
+
+        #devise {
+            font-family: monospace;
+            font-size: x-large;
+            padding-left: 10px;
+            font-weight: 100;
+            padding-right: 10px;
+            padding-top: 10px;
+            opacity: 0.5;
+        }*/
+
+        #contentSolde {
+            position: absolute;
+            right: 10px;
+            top: 55px;
+        }
+
+        .contentAll {
+            /*background-image: url('../img/backgrnd_login.png');*/
+            background-image: url('../../img/backgrnd_login.png');
+        }
+    </style>
+
+    <script src="@Url.Content("~/Scripts/global.js")"></script>
+    <script src="@Url.Content("~/Scripts/ApplicationDs.js?version=1.6")"></script>
+    @if (Request.IsAuthenticated)
+    {
+        <script src="@Url.Content("~/Scripts/app_menu.js?version=1.1")"></script>
+    }
+</head>
+<body>
+    <div id="windowP"></div>
+
+    <div id="windowFichier"></div>
+
+    <div id="notification" style="display:none;"></div>
+
+    <div id="notificationNoHide" style="display:none;"></div>
+
+    <script id="emailTemplate" type="text/x-kendo-template">
+        <div class="new-mail">
+            <h4><i class="fa fa-2x fa-envelope-o"></i> #= title #</h4>
+            <p>#= message #</p>
+        </div>
+    </script>
+
+    <script id="errorTemplate" type="text/x-kendo-template">
+        <div class="wrong-pass">
+            <h4><i class="fa fa-2x fa-exclamation-triangle"></i> #= title #</h4>
+            <p>#= message #</p>
+        </div>
+    </script>
+
+    <script id="successTemplate" type="text/x-kendo-template">
+        <div class="upload-success">
+            <h4><i class="fa fa-2x fa-check"></i> #= title #</h4>
+            <p>#= message #</p>
+        </div>
+    </script>
+
+    <div class="container contentAll">
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container head-content" style="margin: 0%; position:relative">
+                @*<div id="contentLogo">
+                    <img src="@Url.Content("~/img/logo_login.png")" />
+                </div>*@
+                @if (Request.IsAuthenticated)
+                {
+                    @*<div id="contentSolde" title="Devise">
+                        <span id="txtSolde"> SOLDE </span>
+                        <span id="lbSolde"></span>
+                        <span id="devise"> DHS </span>
+                    </div>*@
+                }
+                @*<div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>*@
+                <div class="" style="position: absolute; right: 0; top: 0; background-color:white;">
+                    @Html.Partial("_LoginPartial")
+                </div>
+            </div>
+        </div>
+
+        @*<div class="container body-content" style="position: relative;">*@
+            @RenderBody()
+            <hr style="border:none;" />
+            @*<p style="position: absolute;bottom: -40px;left: -24px;">&copy; Copyright @DateTime.Now.Year - Created by GROUPE OMF</p>
+            <span class="S_media">
+                <span id="facebook" class="dot"><a href="https://www.facebook.com/groupeomf/"><i class="fa fa-facebook" aria-hidden="true" title="facebook"></i></a></span>
+                <span id="youtube" class="dot"><a href="https://www.youtube.com/channel/UCreduvskK6iwj5RfyoIY8Yg"><i class="fa fa-youtube-play" aria-hidden="true" title="youtube"></i></a></span>
+                <span id="twitter" class="dot"><a href="http://www.gestionlogin.com/"><i class="fa fa-twitter" aria-hidden="true" title="twitter"></i></a></span>
+                <span id="linkedin" class="dot"><a href="http://groupe-omf.com/"><i class="fa fa-linkedin" aria-hidden="true" title="linkedin"></i></a></span>
+
+            </span>*@
+        @*</div>*@
+    </div>
+    @*<footer>
+            <p>&copy; Copyright @DateTime.Now.Year - Created by GROUPE OMF</p>
+            <span class="S_media">
+                <span id="facebook" class="dot"><i class="fa fa-facebook" aria-hidden="true" title="facebook"></i></span>
+                <span id="youtube" class="dot"><i class="fa fa-youtube-play" aria-hidden="true" title="youtube"></i></span>
+                <span id="twitter" class="dot"><i class="fa fa-twitter" aria-hidden="true" title="twitter"></i></span>
+                <span id="linkedin" class="dot"><i class="fa fa-linkedin" aria-hidden="true" title="linkedin"></i></span>
+
+            </span>
+        </footer>*@
+
+    @*_______ Template Civilité : _______*@
+
+    <script type="text/x-kendo-tmpl" id="template">
+        <b> Bonjour :</b> #:lb#
+    </script>
+
+    @*_______ Style : _______*@
+
+    @*<style>
+            #cvlt{
+            position:absolute;
+            right : 140px;
+            padding-top: 17px; color: #999999;
+            border: none;
+            background-color: #222222;
+            }
+        </style>*@
+
+    @*<script>
+
+            var listView = $("#cvlt").kendoListView({
+                dataSource: DsCivilite,
+                template: kendo.template($("#template").html())
+            }).data("kendoListView");;
+
+
+        </script>*@
+
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    <script>
+
+        jQuery(document).ready(function (cash) {
+            $.backstretch([
+                "@Url.Content("~/img/bg.jpg")"
+            ]);
+        });
+
+        //___ refresheSolde :
+
+        refresheSolde();
+
+    </script>
+    <script src="@Url.Content("~/Scripts/notifications.js?v=1")"></script>
+</body>
+</html>

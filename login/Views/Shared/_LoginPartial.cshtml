@@ -1,0 +1,73 @@
+@using Microsoft.AspNet.Identity
+@using login.Models
+
+@*@using Microsoft.AspNet.Identity
+    @if (Request.IsAuthenticated)
+    {
+        using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+        {
+        @Html.AntiForgeryToken()
+
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            </li>
+            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+        </ul>
+        }
+    }
+    else
+    {
+        <ul class="nav navbar-nav navbar-right">
+            <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+            <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+        </ul>
+    }*@
+
+@*@if (Request.IsAuthenticated)
+    {*@
+@using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+{
+    @Html.AntiForgeryToken()
+    <ul class="nav navbar-nav navbar-right">
+        <li>
+            @if (Request.IsAuthenticated)
+            {
+                <span class="employe-photo" style="background-image: url(/PJ/Avatar/@(User.Identity.GetUserId() + ".jpg"));height: 45px;width: 45px;margin-top: 3px;"></span>
+            }
+        </li>
+        <li id="loguser">
+            @*@Html.ActionLink("Bonjour " + User.Identity.GetUserName() + "!", "ChangePassword", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })*@
+            @if (Request.IsAuthenticated)
+            {
+
+                @Html.ActionLink(User.Identity.GetCivilite() + " " + User.GetFullName() + "!", "config", "user", routeValues: null, htmlAttributes: new { title = "Manage" })
+            }
+            else
+            {
+                @Html.ActionLink("Test", "Login", "Account", routeValues: null, htmlAttributes: new { title = "Manage", id = "bonjour-anonyme" })
+            }
+        </li>
+        @*<li><i class="fa fa-picture-o" id="change-image" title="Modifier l'image de font" style="color: #000;"></i></li>*@
+        <li style="vertical-align: middle;">@Html.Action("MenuP", "Menu")</li>
+        <li>
+            <a id="logoff" href="javascript:document.getElementById('logoutForm').submit()">
+                @*<i class="fa fa-power-off" style="font-size: 14px" title="Se déconnecter"></i>*@@*<img  id="logout" src="/img/logout.png" title="Se déconnecter" />*@
+                <img src="@Url.Content("~/img/log_out.png")" title="Se déconnecter" style="height:15px; width:20px;" />
+            </a>
+        </li>
+    </ul>
+}
+@* } *@
+@*else
+    {
+        Response.Redirect("~/Account/Login");
+
+        //var org = localstorage.getitem("Organisation");
+        //var email = localstorage.getitem("Email");
+        //if (org == "" && email == "")
+        //{ Response.Redirect("~/Account/Login"); }
+        //else
+        //{ response.redirect("~/g_users/index"); }
+
+    }*@

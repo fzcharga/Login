@@ -1,0 +1,158 @@
+﻿
+
+<div class="row">
+    <div class="col-md-3">
+        <input id="datepicker" value="@DateTime.Now.Date" style="width: 100%" /><input type="checkbox" id="chk1" style="display:none" />
+        <div id="panelBar"></div>
+    </div>
+    <div class="col-md-9">
+        <div class="panel panel-default" style="margin-bottom: 10px;">
+
+            <div id="lvGrouped"></div>
+
+            <div id="gridM"></div>
+        </div>
+
+    </div>
+</div>
+
+
+
+<script>
+    function byString(o, s) {
+        // console.log(s);
+        s = s.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
+        s = s.replace(/^\./, '');           // strip a leading dot
+        var a = s.split('.');
+        for (var i = 0, n = a.length; i < n; ++i) {
+            var k = a[i];
+            if (o != null && k in o) {
+                o = o[k];
+            } else {
+                return null;
+            }
+        }
+        return o;
+    }
+
+
+    $("#datepicker").kendoDatePicker({
+        change: function () {
+            // DsUserGroup.read({ Dt: JSON.stringify(this.value()) });
+            dataSource.read();
+
+        }
+
+    });
+
+    function getdata() {
+        return {
+            //emp: true,
+            Dt: kendo.toString($("#datepicker").data("kendoDatePicker").value(), 'MM/dd/yyyy'),
+            //mois: $("#chk1").is(':checked'),
+            //parrain: false,
+            //inscrit: false,
+            //save: false,
+            //jpo: false
+        }
+    }
+
+
+
+    var dataSource = new kendo.data.DataSource({
+        transport: {
+            read: {
+                //   async: false,
+                url: URLROOT + "connexion/read",
+                dataType: "json",
+                contentType: "application/json",
+                data: getdata
+            }
+        },
+        schema: {
+            model: {
+
+                fields: {
+
+                    date: { type: "date" },
+                   
+                  
+
+                }
+            }
+        },
+        sort: {
+            field: "date",
+            dir: "asc"
+        }
+
+
+       
+
+
+    });
+
+
+    $("#gridM").kendoGrid({
+        dataSource: dataSource,
+        navigatable: true,
+        sortable: true,
+        dataBound: function () {
+
+            var grid = this;
+
+
+            //$(".fa-phone").click(function () {
+            //    ajouterListe($(this).text());
+            //    //  console.log("anass", $(this).text());
+            //});
+
+
+
+            if (typeof panelBar !== "undefined")
+                panelBar.init();
+        },
+        // pageable: true,
+        height: 550,
+        toolbar: ["excel"],
+        excel: {
+            fileName: "ExportLeads.xlsx",
+
+            filterable: true
+        },
+      //  excelExport: exportGridWithTemplatesContent,
+        //  toolbar: ["create", "save", "cancel"],
+        columns: [
+
+
+            { field: "date", title: "Date", format: "{0:g}", width: 120 },
+            { field: "user", title: "utilisateur", width: 120},
+            { field: "org", title: "Abonne", width: 120 },
+            { field: "page", title: "Page", width: 220 },
+          
+
+
+        ],
+
+    });
+
+
+    var panelBar = $("#panelBar").kendoOmfPanelBar({
+        dataSourceWidget: dataSource,
+        targetSmartMenuId: "#lvGrouped",
+        dataSource: [
+            { field: "user", text: "Utilisateur" },
+            { field: "org", text: "Abonne" },
+            { field: "op", text: "Type" },
+            { field: "page", text: "page" },
+            { field: "jour", text: "par date", expanded: false },
+          
+
+
+        ]
+    }).data("kendoOmfPanelBar");
+
+
+
+
+</script>

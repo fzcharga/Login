@@ -1,0 +1,34 @@
+﻿@*On ajoute un menu qui contient les elements de ce projet *@
+@(Html.Kendo().Menu()
+      .Name("Menu")
+          .HtmlAttributes(new { style = "margin-bottom: 20px" })
+      .Items(items =>
+      {
+        @*
+            On ajoute ici les elements de ce menu avec le text et le lien vers une page
+        *@
+items.Add()
+    .Text("Ajouter Des Locataires")
+    .Url(Url.Content("~/Locataire"));
+
+        @*
+            Ici c'est la meme chose on ajoute un element avec le text et le lien vers la page de ce element
+        *@
+items.Add()
+.Text("Ajouter des appartements")
+.Url(Url.Content("~/Appart"));
+
+        @*
+            Ici c'est la meme chose mais en test si l'utlisateur connecte a le role Global ou nn , si oui on affiche dans le
+            menu ce element sinon on l'affiche pas
+        *@
+
+          items.Add()
+         .Text("Transaction")
+         .Url(Url.Content("~/Transaction"));
+
+      })
+
+
+
+)

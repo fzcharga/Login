@@ -1,0 +1,166 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<style>
+    #gridAbonne .k-icon {
+        margin: 0;
+    }
+
+    h2 {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+    }
+
+    footer {
+        POSITION: relative;
+        left: 0%;
+        top: 30px;
+    }
+
+    .S_media {
+        position: absolute;
+        top: 0%;
+        right: 4%;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <span class="title-heading">ABONNES</span>
+            </div>
+            <div class="panel-body">
+                <div id="gridAbonne"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <span class="title-heading">ABONNÉ</span> <input id="drpAbonne" style="width: 250px;" />
+            </div>
+            <div class="panel-body">
+                <div id="gridUser"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function ChangeAbonne() {
+        var value = this.value();
+        DsUser.read({ idAbonne: value });
+    }
+
+    var DsAbonne = new kendo.data.DataSource({
+        type: "aspnetmvc-ajax",
+        batch: true,
+        transport: {
+            read: {
+                url: URLROOT + "Abonne/ReadAbonne",
+                type: "POST",
+            },
+            create: {
+                url: URLROOT + "Abonne/CreateAbonne",
+                type: "POST",
+            },
+            update: {
+                url: URLROOT + "Abonne/UpdateAbonne",
+                type: "POST",
+            },
+        },
+        pageSize: 20,
+        schema: {
+            model: {
+                id: "id",
+                fields: {
+                    id: { type: "number" },
+                    lb: { type: "string" }
+                }
+            }
+        }
+    });
+
+    var DsUser = new kendo.data.DataSource({
+        type: "aspnetmvc-ajax",
+        batch: true,
+        transport: {
+            read: {
+                url: URLROOT + "Abonne/ReadUser",
+                type: "POST",
+            },
+            create: {
+                url: URLROOT + "Abonne/CreateUser",
+                type: "POST",
+                data: OnSelectAbonne
+            },
+            update: {
+                url: URLROOT + "Abonne/UpdatUser",
+                type: "POST",
+            },
+            destroy: {
+                url: URLROOT + "Abonne/DeleteUser",
+                type: "POST",
+            },
+
+        },
+        schema: {
+            model: {
+                id: "id",
+                fields: {
+                    id: { type: "number" },
+                    name: { type: "string" },
+                    email: { type: "string" },
+                    password: { type: "string" },
+                    fk_Abonne: { type: "number" }
+                }
+
+            }
+        }
+    });
+
+    var gridAbonne = $("#gridAbonne").kendoGrid({
+        toolbar: [{ name: "create", text: "" }, { name: "save", text: "" }, { name: "cancel", text: "" }],
+        editable: true,
+        dataSource: DsAbonne,
+        height: 500,
+        columns: [{
+            field: "lb",
+            title: "Libelle"
+        }, {
+            field: "email",
+            title: "Email"
+        }]
+    }).data("kendoGrid");
+
+    var gridUser = $("#gridUser").kendoGrid({
+        toolbar: [{ name: "create", text: "" }, { name: "save", text: "" }, { name: "cancel", text: "" }],
+        // autoBind: false,
+        height: 500,
+        editable: true,
+        dataSource: DsUser,
+        columns: [
+            {
+                field: "name",
+                title: "UserName"
+            },
+            {
+                field: "email",
+                title: "Email"
+            },
+            {
+                field: "password",
+                title: "Password"
+            },
+            {
+                command: ["destroy"],
+                title: "command"
+            }
+        ]
+    }).data("kendoGrid");
+
+</script>
+

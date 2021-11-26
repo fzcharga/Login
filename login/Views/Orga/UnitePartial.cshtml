@@ -1,0 +1,116 @@
+@{
+    ViewBag.Title = "Organisation";
+}
+
+<script>
+    function OnSelectAbonne() {
+        return {
+            idAbonne: selectedAbonne
+        };
+    }
+</script>
+<div id="content-grid">
+    <div id="GridUnite"></div>
+</div>
+
+<script>
+    var DsUnite = new kendo.data.DataSource({
+        type: "aspnetmvc-ajax",
+        // batch: true,
+        transport: {
+            read: {
+                url: URLROOT + "Orga/ReadUnite",
+                type: "GET",
+            },
+            update: {
+                url: URLROOT + "Orga/UpdateUnite",
+                type: "POST",
+            },
+
+            create: {
+                url: URLROOT + "Orga/CreateUnite",
+                type: "POST",
+            },
+
+        },
+        schema: {
+            model: {
+                id: "id",
+                fields: {
+                    lb: { type: "string" },
+                     
+                }
+            }
+        },
+        pageSize: 10,
+        //group: {
+        //    field: "id",
+        //    aggregates: [
+        //        { field: "lb", aggregate: "count" },
+        //    ],
+        //},
+        aggregate: [
+             { field: "lb", aggregate: "count" },
+        ],
+    });
+
+    var GridUnite = $("#GridUnite").kendoGrid({
+        dataSource: DsUnite,
+        editable:"inline",
+        pageable: true, 
+        selectable: true,
+        sortable: true,
+        height: 550,
+        toolbar: ["create"],
+        columns: [
+           { field: "lb", title: "name unite", aggregates: ["count"], footerTemplate: "Organisation Count: #=count#", ClientFooterTemplate: "Count: #=count#" },
+                { command: ["edit" ], title: "&nbsp;", }
+        ],
+    
+
+    }).data("kendoGrid");
+
+    //$(document).ready(function () {
+    //    $(window).load(function () {
+    //        $("td").dblclick(function (e) {
+    //            var entityGrid = $("#GridUnite").data("kendoGrid");
+    //            var selectedItem = entityGrid.dataItem(entityGrid.select());
+    //            var id = selectedItem.id;
+    //            TC(id);
+    //            createWndL("WindowOrga", "Orga/PartialOrga?ido=" + id, "Diagrame : " + selectedItem.lb, 800, 750);
+    //            $("#WindowOrga").data("kendoWindow").open().center();
+    //        });
+    //    });
+    //});
+</script>
+ @*(Html.Kendo().Grid<login.Models.ModelUnite>()
+                .Name("GridUnite")
+        .Columns(columns =>
+        {
+            columns.Bound(e => e.lb).ClientFooterTemplate("#=count# Organisation(s)");
+            columns.Command(c => c.Edit());
+        })
+        .ToolBar(t => t.Create())
+           .Selectable()
+           .Pageable()
+           .Filterable()
+       .DataSource(dataSource => dataSource
+            .Ajax()
+             .Aggregates(ag =>
+                {
+                    ag.Add(t => t.lb).Count();
+                })
+            .Model(
+                model =>
+                {
+                    model.Id(c => c.id);
+                })
+                    .Events(events => events.Error("error_handler"))
+                    .Read(read => read.Action("ReadUnite", "Orga").Data("OnSelectAbonne"))
+                    .Create(u => u.Action("CreateUnite", "Orga").Data("OnSelectAbonne"))
+                    .Update(u => u.Action("UpdateUnite", "Orga"))
+             )
+    )*@
+ 
+
+

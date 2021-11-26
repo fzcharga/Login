@@ -1,0 +1,80 @@
+﻿<div id="gridRole2_@(ViewBag.idu)"></div>
+<script>
+    var idr = @Html.Raw(Json.Encode(ViewBag.idu));
+
+    var DsRole = new kendo.data.DataSource({
+        type: "aspnetmvc-ajax",
+        batch: true,
+        transport: {
+            read: {
+                url: URLROOT + "Role/ReadRole",
+                type: "POST",
+                data: { idr: idr}
+            },
+            update: {
+                url: URLROOT + "Role/UpdateRole",
+                type: "POST",
+                data: { idr: idr}
+            }
+        },
+        schema: {
+            model: {
+                id: "id",
+                fields: {
+                    id: { type: "string" },
+                    lb: { type: "string" },
+                    val:{ type:"boolean" }
+                }
+            }
+        },
+        pageSize: 6,
+    });
+
+    $("#gridRole2_" + idr).kendoGrid({
+        toolbar: [{ name: "save", text: "" }, { name: "cancel", text: "" }],
+        autoBind: true,
+        dataSource: DsRole,
+        columns: [
+            {
+                field: "lb",
+                editable: false,
+                Width:"60%"
+            },
+            {
+                field: "val",
+                template: "# if(val){ # <i class='fa fa-check' style='color:green'></i># } #"
+
+            }
+        ],
+        sortable: true,
+        pageable: true,
+        editable: "incell",
+    })
+
+</script>
+@*@(Html.Kendo().Grid<CRM.Models.ModelRole>()
+            .Name("gridRole2_" + DateTime.Now.ToString("mmss"))
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.lb).Width("60%");
+        //columns.Bound(p => p.val).ClientTemplate("<input disabled='disabled' type='checkbox' #= val  ? checked='checked' : '' # ></input>");
+        columns.Bound(p => p.val).ClientTemplate("# if(val){ # <i class='fa fa-check' style='color:green'></i># } #");
+
+    })
+    .ToolBar(toolbar => toolbar.Save())
+         .AutoBind(true)
+    .Editable(editable => editable.Mode(GridEditMode.InCell))
+      .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(6)
+        .Batch(true)
+               .Model(model => model.Id(p => p.id))
+        .Model(model => model.Field(p => p.lb).Editable(false))
+            .Read(read => read.Action("ReadRole", "Role", new { idr = ViewBag.idu }))
+            .Update(update => update.Action("UpdateRole", "Role", new { idr = ViewBag.idu }))
+
+     )
+     .Pageable()
+     .Sortable()
+        //.ToClientTemplate()
+)*@

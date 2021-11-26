@@ -1,0 +1,230 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+<style>
+    .form-group-send {
+        text-align: end;
+    }
+
+    .form-item-btn-send {
+        padding-left: 20px;
+        text-align: left;
+        width: 50%;
+        height: 30px;
+        max-height: 30px;
+        max-width: unset;
+        text-align: center;
+        /*____________________*/
+        background-image: linear-gradient(to right,#657dbe, #6bb4e4);
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+        border: none !important;
+        color: white !important;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    h2 {
+        color: #999999;
+    }
+
+    .margRow {
+        margin-bottom: 3%;
+    }
+
+    .panel-body {
+        padding: 0;
+    }
+
+    .container-utl {
+        text-align: end;
+        padding-right: 4%;
+    }
+</style>
+
+<h2>Gestion Mails</h2>
+
+<div class="row margRow">
+    <div class="col-md-6">
+        <span id="drpMail"></span>
+    </div>
+    <div class="col-md-6 panel-body container-utl">
+        <button id="sendMail" class="btn btn-primary form-item-btn-send">Envoyé</button>
+    </div>
+</div>
+<div id="GridUsers"></div>
+
+<script id="tmpChecked" type="text/kendo-tmpl">
+    # var checkedMail = checked ? 'checked' : '' #
+    <div class='center'>
+        <input type='checkbox' onchange="onSelectUser(this, '#:id#')" #:checkedMail# />
+        # if(dateCreation != null) { #
+        <div><span>#:kendo.toString(kendo.parseDate(dateCreation), 'dd/MM/yyyy HH:mm')# </span> <i onclick="openMail(#:idMail#)" class='fa fa-envelope'></i></div>
+        # } #
+        # if(message != null) { #
+        <div><span class="text-danger" title="#:message#">Erreur</span></div>
+        # } #
+    </div>
+</script>
+
+@*<script src="@Url.Content("~/Scripts/notifications.js")"></script>*@
+
+<script>
+
+    var URLROOTCRM = @Html.Raw(Json.Encode(ViewBag.urlCRM));
+
+    var DsProjet = new kendo.data.DataSource({
+        type: "aspnetmvc-ajax",
+        transport: {
+            read: {
+                url: URLROOT + "Mail/ReadProjet",
+                type: "POST"
+            }
+        },
+        schema: {
+            model: {
+                id: "id",
+                fields: {
+                    id: { type: "number" },
+                    lb: { type: "string" },
+
+                }
+            }
+        }
+    });
+
+    var DsUsers = new kendo.data.DataSource({
+        type: "aspnetmvc-ajax",
+        transport: {
+            read: {
+                url: URLROOT + "Mail/ReadUsers",
+                type: "POST"
+            }
+        },
+        schema: {
+            model: {
+                id: "id",
+                fields: {
+                    id: { type: "string" },
+                    name: { type: "string" },
+                    email: { type: "string" },
+                    checked: { type: "boolean" },
+                    message : { type: "string", nullable: true },
+                }
+            },
+            //parse: function (data) {
+            //    $.each(data, function (i, e) {
+            //        e.checked = false;
+            //    });
+            //    return data;
+            //}
+        }
+    });
+
+    var DsObjectMail = new kendo.data.DataSource({
+        type: "aspnetmvc-ajax",
+        transport: {
+            read: {
+                url: URLROOT + "Mail/ReadObjectMail",
+                type: "POST"
+            }
+        },
+        schema: {
+            model: {
+                id: "id",
+                fields: {
+                    id: { type: "number" },
+                    lb: { type: "string" },
+                    idmodelCRM: { type: "number" }
+
+                }
+            }
+        }
+    });
+
+    var drpMail = $("#drpMail").kendoDropDownList({
+        valuePrimitive: true,
+        optionLabel: "Choisir Mail ...",
+        dataSource: DsObjectMail,
+        dataTextField: "lb",
+        dataValueField: "id",
+        change: function () {
+            var value = this.value();
+            if ( value != null) {
+                DsUsers.read({  idObj: value });
+            }//else{}//notification.show({title: "", message:" (!) Aucun mail "},"error");
+        }
+    }).data("kendoDropDownList");
+
+    $("#sendMail").click(function () {
+        var IdMail = drpMail.value();
+        var items = $.map($.grep(DsUsers.data(), function (e) { return e.checked; }), function (e) {
+            return { idCRM: e.idCRM, id: e.id };
+        });
+        var dataClient = JSON.stringify(items);
+        $.ajax({
+            url: URLROOT + "Mail/SendMail",
+            type: "POST",
+            data: { idObj: IdMail, clients: items },
+            success: function (data) {
+                $.each(data, function(i, e) {
+                    var di = DsUsers.get(e.id);
+                    if(e.success)
+                    {
+                        di.dateCreation = e.dateCreation;
+                        di.idMail = e.idMail;
+                        di.message = null;
+                    }
+                    else {
+                        di.message = e.message;
+                    }
+                });
+                DsUsers.fetch();
+            },
+            error: function(data) {
+
+            }
+        });
+    });
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    // sleep :
+    function sleep (time) {
+        return new Promise((resolve) => setTimeout(resolve, time));
+    }
+
+    function onSelectAllUser(ele) {
+        var checked = $(ele).is(":checked");
+        $.each(DsUsers.data(), function (i, e) {
+            e.checked = checked;
+        });
+        if(DsUsers.total()!=0)
+            DsUsers.fetch();
+        else
+            notification.show({title: "", message:" la table vide "},"error");
+        sleep(3000).then(() => {
+            checkfetch.checked = false ;
+        });
+    }
+
+    function onSelectUser(ele, id) {
+        var checked = $(ele).is(":checked");
+        DsUsers.get(id).set("checked", checked);
+    }
+
+    var gridUsers = $("#GridUsers").kendoGrid({
+        dataSource: DsUsers,
+        autoBind: false,
+        columns: [{
+            field: "name",
+            title: "UserName",
+        }, {
+            field: "email",
+            title: "E-mail",
+        }, {
+            field: "checked",
+            title: "<div class='center'><input  id='checkfetch' type='checkbox' onchange='onSelectAllUser(this)' title='Actualiser' ></div>",
+            template: kendo.template($("#tmpChecked").html()),// "<div class='center'><input type='checkbox' onchange='onSelectUser(this, \"#:id#\")' />#if(dateCreation!=null){#<p>#:dateCreation#</p><i class='far fa-envelope'></i>#}#</div>",
+        }]
+    }).data("kendoGrid");
+</script>

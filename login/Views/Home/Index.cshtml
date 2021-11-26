@@ -1,0 +1,130 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<style>
+    .fond {
+        background-image: url(images/12121.png);
+        background-repeat: repeat;
+        padding-top: 40px;
+    }
+
+    .morade {
+        background-image: url(images/Objetdynamiquevector_1.png);
+        width: 130px;
+        height: 134px;
+        background-repeat: no-repeat;
+        background-position: bottom;
+    }
+
+    .buildingBlock {
+        background-repeat: no-repeat;
+        background-position: bottom;
+        background-image: url(images/Objetdynamiquevector_1.png);
+        display: inline-block;
+        width: 136px;
+        height: 134px;
+        margin: 2px 30px;
+        position: relative;
+    }
+
+    #container {
+        text-align: center;
+        text-align: center;
+        position: relative;
+        /* top: 274px; */
+        margin-top: 2%;
+    }
+
+    .logo {
+        text-align: center;
+        align-items: center;
+        width: 100%;
+        margin-top: 2%;
+    }
+
+    #img logo {
+        width: 263px;
+    }
+
+    #div-griser {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(100,100,100,0.5);
+        border-radius: 50%;
+    }
+</style>
+
+<body class="fond">
+    <div id="container"></div>
+    <div id="content-iframs" style="display: none;"></div>
+</body>
+
+<script>
+    DsApplicationsUsers.read();
+
+    var Sites = DsApplicationsUsers.data();
+
+    for (var i = 0; i < Sites.length; i++) {
+        var s = Sites[i];
+        if (s.url[s.url.length - 1] == "/" && s.useLogin) { //  style="width: 100%;height: 900px;"
+            $("#content-iframs").append('<div><iframe src="' + s.url + 'Account/Login?Email=' + s.login + '&Password=' + s.password + '"></iframe></div>');
+        }
+    }
+
+    // var tab = ["crm", "gestion", "point", "ged", "mail", "invoice", "consultant", "coursier", "project", "appartement", "banque", "ingenierie", "compta", "gep"];
+
+    var objContainer = document.getElementById("container"), intLevels = 6, strBlocksHTML = "";
+
+    // Using innerHTML is faster than DOM appendChild
+
+    var tabi = 0;
+
+    for (var i = 0; i < intLevels; i++) {
+        for (var n = 0; n < i + 4; n++) {
+            var extern = 'target="_blank"';
+            if (Sites[tabi] !== undefined) {
+                if (Sites[tabi].name == "gestion" || Sites[tabi].name == "ingenierie" || Sites[tabi].name == "c")
+                    extern = '';
+                strBlocksHTML += '<div class="item' + tabi + ' item-' + Sites[tabi].name + ' buildingBlock"><span class="hint--top content-' + Sites[tabi].useLogin + '" aria-label="' + Sites[tabi].desc + '"><a href="' + (Sites[tabi].urlStart != null && Sites[tabi].urlStart != "" ? Sites[tabi].urlStart : Sites[tabi].url) + '" ' + extern + '><img style="width: 99%;" src="/Images/Home/' + Sites[tabi].name + '.png?v=' + new Date().getTime() + '" class="hvr-bob"></a></span></div>';
+            }
+            tabi++;
+        }
+        strBlocksHTML += '<div></div>';
+    }
+
+    objContainer.innerHTML = strBlocksHTML;
+
+    var count = tabi;
+
+    for (tabi = 0; tabi < count; tabi++) {
+        showGriser(".item" + tabi + " span:not(.content-false)");
+    }
+
+    function showGriser(selector) {
+        if (typeof selector !== "undefined")
+            $(selector).append("<div id='div-griser'></div>");
+        else
+            $("body").append("<div id='div-griser'></div>");
+    }
+
+    function hideGriser(selector) {
+        if (typeof selector !== "undefined")
+            $(selector).find("#div-griser").remove();
+        else
+            $("body").find("#div-griser").remove();
+    }
+
+    var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+    var eventer = window[eventMethod];
+    var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
+
+    eventer(messageEvent, function (e) {
+        var parts = e.data.split(',');
+        if (parts[0] == "hideGriser")
+            hideGriser(parts[1]);
+    });
+</script>

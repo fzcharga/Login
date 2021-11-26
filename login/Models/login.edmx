@@ -1,0 +1,1052 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="loginModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Abonne">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Libelle" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="IdCRM" Type="int" Nullable="false" />
+          <Property Name="Email" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Type" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Applications">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Url" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="NotUseLogin" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ApplicationsUsers">
+          <Key>
+            <PropertyRef Name="FkApplications" />
+            <PropertyRef Name="FkUser" />
+          </Key>
+          <Property Name="FkApplications" Type="int" Nullable="false" />
+          <Property Name="FkUser" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Login" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="UrlStart" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="AspNetRoles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUserClaims">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ClaimType" Type="nvarchar(max)" />
+          <Property Name="ClaimValue" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="AspNetUserLogins">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ProviderKey" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUserRoles">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="RoleId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Fk_Abonne" Type="int" Nullable="false" />
+          <Property Name="IdCRM" Type="int" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="256" />
+          <Property Name="EmailConfirmed" Type="bit" Nullable="false" />
+          <Property Name="PasswordHash" Type="nvarchar(max)" />
+          <Property Name="SecurityStamp" Type="nvarchar(max)" />
+          <Property Name="PhoneNumber" Type="nvarchar(max)" />
+          <Property Name="PhoneNumberConfirmed" Type="bit" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="bit" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="datetime" />
+          <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Fk_Civilite" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Civilite">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Libelle" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="DynMenu">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Libelle" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Url" Type="nvarchar" MaxLength="50" />
+          <Property Name="Icon" Type="nvarchar" MaxLength="50" />
+          <Property Name="Ordre" Type="int" Nullable="false" />
+          <Property Name="fk_menu" Type="int" />
+          <Property Name="Titre" Type="nvarchar" MaxLength="300" />
+          <Property Name="Description" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Etat">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Libelle" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="color" Type="nvarchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Extension">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ext" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="type" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Menu_Role">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="RoleId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ObjectMail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Libelle" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="IdModelCRM" Type="int" />
+        </EntityType>
+        <EntityType Name="ORGANISATION">
+          <Key>
+            <PropertyRef Name="FK_USER" />
+            <PropertyRef Name="FK_ORG" />
+          </Key>
+          <Property Name="FK_USER" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="FK_ORG" Type="int" Nullable="false" />
+          <Property Name="FK_SUP" Type="nvarchar" MaxLength="128" />
+          <Property Name="ETAT" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SendedMail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="Fk_User" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Fk_ObejctMail" Type="int" Nullable="false" />
+          <Property Name="IdMail" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TypeFichier">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Libelle" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UNITE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LIBELLE" Type="varchar" MaxLength="50" />
+          <Property Name="idGroupe" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="user_history">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fk_menu" Type="int" Nullable="false" />
+          <Property Name="fk_user" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="date" Type="datetime" Nullable="false" />
+          <Property Name="type" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__AspNetUse__Fk_Ci__398D8EEE">
+          <End Role="Civilite" Type="Self.Civilite" Multiplicity="1" />
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Civilite">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUsers">
+              <PropertyRef Name="Fk_Civilite" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ApplicationsUsers_Applications">
+          <End Role="Applications" Type="Self.Applications" Multiplicity="1" />
+          <End Role="ApplicationsUsers" Type="Self.ApplicationsUsers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Applications">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ApplicationsUsers">
+              <PropertyRef Name="FkApplications" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AspNetUserLogins_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="AspNetUserLogins" Type="Self.AspNetUserLogins" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogins">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AspNetUserRoles_AspNetRoles">
+          <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1" />
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetRoles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_AspNetUserRoles_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserRoles">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DynMenu_DynMenu">
+          <End Role="DynMenu" Type="Self.DynMenu" Multiplicity="0..1" />
+          <End Role="DynMenu1" Type="Self.DynMenu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DynMenu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DynMenu1">
+              <PropertyRef Name="fk_menu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Extension_TypeFichier">
+          <End Role="TypeFichier" Type="Self.TypeFichier" Multiplicity="1" />
+          <End Role="Extension" Type="Self.Extension" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TypeFichier">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Extension">
+              <PropertyRef Name="type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Menu_Role_AspNetRoles">
+          <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1" />
+          <End Role="Menu_Role" Type="Self.Menu_Role" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetRoles">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Menu_Role">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Menu_Role_DynMenu">
+          <End Role="DynMenu" Type="Self.DynMenu" Multiplicity="1" />
+          <End Role="Menu_Role" Type="Self.Menu_Role" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DynMenu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Menu_Role">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ORGANISATION_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="ORGANISATION" Type="Self.ORGANISATION" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ORGANISATION">
+              <PropertyRef Name="FK_USER" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ORGANISATION_ORGANISATION">
+          <End Role="ORGANISATION" Type="Self.ORGANISATION" Multiplicity="0..1" />
+          <End Role="ORGANISATION1" Type="Self.ORGANISATION" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ORGANISATION">
+              <PropertyRef Name="FK_USER" />
+              <PropertyRef Name="FK_ORG" />
+            </Principal>
+            <Dependent Role="ORGANISATION1">
+              <PropertyRef Name="FK_SUP" />
+              <PropertyRef Name="FK_ORG" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ORGANISATION_UNITE">
+          <End Role="UNITE" Type="Self.UNITE" Multiplicity="1" />
+          <End Role="ORGANISATION" Type="Self.ORGANISATION" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UNITE">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ORGANISATION">
+              <PropertyRef Name="FK_ORG" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SendedMail_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="SendedMail" Type="Self.SendedMail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SendedMail">
+              <PropertyRef Name="Fk_User" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SendedMail_ObjectMail">
+          <End Role="ObjectMail" Type="Self.ObjectMail" Multiplicity="1" />
+          <End Role="SendedMail" Type="Self.SendedMail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ObjectMail">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SendedMail">
+              <PropertyRef Name="Fk_ObejctMail" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="loginModelStoreContainer">
+          <EntitySet Name="Abonne" EntityType="Self.Abonne" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Applications" EntityType="Self.Applications" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ApplicationsUsers" EntityType="Self.ApplicationsUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Civilite" EntityType="Self.Civilite" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DynMenu" EntityType="Self.DynMenu" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Etat" EntityType="Self.Etat" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Extension" EntityType="Self.Extension" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Menu_Role" EntityType="Self.Menu_Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ObjectMail" EntityType="Self.ObjectMail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ORGANISATION" EntityType="Self.ORGANISATION" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SendedMail" EntityType="Self.SendedMail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TypeFichier" EntityType="Self.TypeFichier" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UNITE" EntityType="Self.UNITE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="user_history" EntityType="Self.user_history" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__AspNetUse__Fk_Ci__398D8EEE" Association="Self.FK__AspNetUse__Fk_Ci__398D8EEE">
+            <End Role="Civilite" EntitySet="Civilite" />
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ApplicationsUsers_Applications" Association="Self.FK_ApplicationsUsers_Applications">
+            <End Role="Applications" EntitySet="Applications" />
+            <End Role="ApplicationsUsers" EntitySet="ApplicationsUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AspNetUserLogins_AspNetUsers" Association="Self.FK_AspNetUserLogins_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AspNetUserRoles_AspNetRoles" Association="Self.FK_AspNetUserRoles_AspNetRoles">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_AspNetUserRoles_AspNetUsers" Association="Self.FK_AspNetUserRoles_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DynMenu_DynMenu" Association="Self.FK_DynMenu_DynMenu">
+            <End Role="DynMenu" EntitySet="DynMenu" />
+            <End Role="DynMenu1" EntitySet="DynMenu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Extension_TypeFichier" Association="Self.FK_Extension_TypeFichier">
+            <End Role="TypeFichier" EntitySet="TypeFichier" />
+            <End Role="Extension" EntitySet="Extension" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Menu_Role_AspNetRoles" Association="Self.FK_Menu_Role_AspNetRoles">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="Menu_Role" EntitySet="Menu_Role" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Menu_Role_DynMenu" Association="Self.FK_Menu_Role_DynMenu">
+            <End Role="DynMenu" EntitySet="DynMenu" />
+            <End Role="Menu_Role" EntitySet="Menu_Role" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ORGANISATION_AspNetUsers" Association="Self.FK_ORGANISATION_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="ORGANISATION" EntitySet="ORGANISATION" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ORGANISATION_ORGANISATION" Association="Self.FK_ORGANISATION_ORGANISATION">
+            <End Role="ORGANISATION" EntitySet="ORGANISATION" />
+            <End Role="ORGANISATION1" EntitySet="ORGANISATION" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ORGANISATION_UNITE" Association="Self.FK_ORGANISATION_UNITE">
+            <End Role="UNITE" EntitySet="UNITE" />
+            <End Role="ORGANISATION" EntitySet="ORGANISATION" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SendedMail_AspNetUsers" Association="Self.FK_SendedMail_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="SendedMail" EntitySet="SendedMail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SendedMail_ObjectMail" Association="Self.FK_SendedMail_ObjectMail">
+            <End Role="ObjectMail" EntitySet="ObjectMail" />
+            <End Role="SendedMail" EntitySet="SendedMail" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="loginModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Abonne">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Libelle" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IdCRM" Type="Int32" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Type" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AspNetRoles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="AspNetUsers" Relationship="Self.AspNetUserRoles" FromRole="AspNetRoles" ToRole="AspNetUsers" />
+          <NavigationProperty Name="DynMenu" Relationship="Self.Menu_Role" FromRole="AspNetRoles" ToRole="DynMenu" />
+        </EntityType>
+        <EntityType Name="AspNetUserClaims">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ClaimType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ClaimValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="AspNetUserLogins">
+          <Key>
+            <PropertyRef Name="LoginProvider" />
+            <PropertyRef Name="ProviderKey" />
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="LoginProvider" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ProviderKey" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="UserId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_AspNetUserLogins_AspNetUsers" FromRole="AspNetUserLogins" ToRole="AspNetUsers" />
+        </EntityType>
+        <EntityType Name="AspNetUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Fk_Abonne" Type="Int32" Nullable="false" />
+          <Property Name="IdCRM" Type="Int32" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="EmailConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SecurityStamp" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumberConfirmed" Type="Boolean" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="LockoutEndDateUtc" Type="DateTime" Precision="3" />
+          <Property Name="LockoutEnabled" Type="Boolean" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="Int32" Nullable="false" />
+          <Property Name="UserName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Fk_Civilite" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AspNetUserLogins" Relationship="Self.FK_AspNetUserLogins_AspNetUsers" FromRole="AspNetUsers" ToRole="AspNetUserLogins" />
+          <NavigationProperty Name="Civilite" Relationship="Self.FK__AspNetUse__Fk_Ci__398D8EEE" FromRole="AspNetUsers" ToRole="Civilite" />
+          <NavigationProperty Name="ORGANISATION" Relationship="Self.FK_ORGANISATION_AspNetUsers" FromRole="AspNetUsers" ToRole="ORGANISATION" />
+          <NavigationProperty Name="SendedMail" Relationship="Self.FK_SendedMail_AspNetUsers" FromRole="AspNetUsers" ToRole="SendedMail" />
+          <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
+        </EntityType>
+        <EntityType Name="Civilite">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Libelle" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUsers" Relationship="Self.FK__AspNetUse__Fk_Ci__398D8EEE" FromRole="Civilite" ToRole="AspNetUsers" />
+        </EntityType>
+        <EntityType Name="DynMenu">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Libelle" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Url" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Icon" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Ordre" Type="Int32" Nullable="false" />
+          <Property Name="fk_menu" Type="Int32" />
+          <Property Name="Titre" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="DynMenu1" Relationship="Self.FK_DynMenu_DynMenu" FromRole="DynMenu" ToRole="DynMenu1" />
+          <NavigationProperty Name="DynMenu2" Relationship="Self.FK_DynMenu_DynMenu" FromRole="DynMenu1" ToRole="DynMenu" />
+          <NavigationProperty Name="AspNetRoles" Relationship="Self.Menu_Role" FromRole="DynMenu" ToRole="AspNetRoles" />
+        </EntityType>
+        <EntityType Name="Etat">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Libelle" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="color" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Extension">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ext" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="type" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TypeFichier" Relationship="Self.FK_Extension_TypeFichier" FromRole="Extension" ToRole="TypeFichier" />
+        </EntityType>
+        <EntityType Name="ObjectMail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Libelle" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IdModelCRM" Type="Int32" />
+          <NavigationProperty Name="SendedMail" Relationship="Self.FK_SendedMail_ObjectMail" FromRole="ObjectMail" ToRole="SendedMail" />
+        </EntityType>
+        <EntityType Name="ORGANISATION">
+          <Key>
+            <PropertyRef Name="FK_USER" />
+            <PropertyRef Name="FK_ORG" />
+          </Key>
+          <Property Name="FK_USER" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FK_ORG" Type="Int32" Nullable="false" />
+          <Property Name="FK_SUP" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ETAT" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_ORGANISATION_AspNetUsers" FromRole="ORGANISATION" ToRole="AspNetUsers" />
+          <NavigationProperty Name="ORGANISATION1" Relationship="Self.FK_ORGANISATION_ORGANISATION" FromRole="ORGANISATION" ToRole="ORGANISATION1" />
+          <NavigationProperty Name="ORGANISATION2" Relationship="Self.FK_ORGANISATION_ORGANISATION" FromRole="ORGANISATION1" ToRole="ORGANISATION" />
+          <NavigationProperty Name="UNITE" Relationship="Self.FK_ORGANISATION_UNITE" FromRole="ORGANISATION" ToRole="UNITE" />
+        </EntityType>
+        <EntityType Name="SendedMail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Fk_User" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Fk_ObejctMail" Type="Int32" Nullable="false" />
+          <Property Name="IdMail" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AspNetUsers" Relationship="Self.FK_SendedMail_AspNetUsers" FromRole="SendedMail" ToRole="AspNetUsers" />
+          <NavigationProperty Name="ObjectMail" Relationship="Self.FK_SendedMail_ObjectMail" FromRole="SendedMail" ToRole="ObjectMail" />
+        </EntityType>
+        <EntityType Name="TypeFichier">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Libelle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Extension" Relationship="Self.FK_Extension_TypeFichier" FromRole="TypeFichier" ToRole="Extension" />
+        </EntityType>
+        <EntityType Name="UNITE">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LIBELLE" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="idGroupe" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ORGANISATION" Relationship="Self.FK_ORGANISATION_UNITE" FromRole="UNITE" ToRole="ORGANISATION" />
+        </EntityType>
+        <EntityType Name="user_history">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_menu" Type="Int32" Nullable="false" />
+          <Property Name="fk_user" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="type" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_AspNetUserLogins_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="AspNetUserLogins" Type="Self.AspNetUserLogins" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUserLogins">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__AspNetUse__Fk_Ci__398D8EEE">
+          <End Role="Civilite" Type="Self.Civilite" Multiplicity="1" />
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Civilite">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="AspNetUsers">
+              <PropertyRef Name="Fk_Civilite" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ORGANISATION_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="ORGANISATION" Type="Self.ORGANISATION" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ORGANISATION">
+              <PropertyRef Name="FK_USER" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SendedMail_AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="SendedMail" Type="Self.SendedMail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SendedMail">
+              <PropertyRef Name="Fk_User" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DynMenu_DynMenu">
+          <End Role="DynMenu" Type="Self.DynMenu" Multiplicity="0..1" />
+          <End Role="DynMenu1" Type="Self.DynMenu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DynMenu">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DynMenu1">
+              <PropertyRef Name="fk_menu" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Extension_TypeFichier">
+          <End Role="TypeFichier" Type="Self.TypeFichier" Multiplicity="1" />
+          <End Role="Extension" Type="Self.Extension" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TypeFichier">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Extension">
+              <PropertyRef Name="type" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SendedMail_ObjectMail">
+          <End Role="ObjectMail" Type="Self.ObjectMail" Multiplicity="1" />
+          <End Role="SendedMail" Type="Self.SendedMail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ObjectMail">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SendedMail">
+              <PropertyRef Name="Fk_ObejctMail" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ORGANISATION_ORGANISATION">
+          <End Role="ORGANISATION" Type="Self.ORGANISATION" Multiplicity="0..1" />
+          <End Role="ORGANISATION1" Type="Self.ORGANISATION" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ORGANISATION">
+              <PropertyRef Name="FK_USER" />
+              <PropertyRef Name="FK_ORG" />
+            </Principal>
+            <Dependent Role="ORGANISATION1">
+              <PropertyRef Name="FK_SUP" />
+              <PropertyRef Name="FK_ORG" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ORGANISATION_UNITE">
+          <End Role="UNITE" Type="Self.UNITE" Multiplicity="1" />
+          <End Role="ORGANISATION" Type="Self.ORGANISATION" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UNITE">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ORGANISATION">
+              <PropertyRef Name="FK_ORG" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="AspNetUserRoles">
+          <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="*" />
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="*" />
+        </Association>
+        <Association Name="Menu_Role">
+          <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="*" />
+          <End Role="DynMenu" Type="Self.DynMenu" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="loginEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Abonne" EntityType="Self.Abonne" />
+          <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" />
+          <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" />
+          <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" />
+          <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" />
+          <EntitySet Name="Civilite" EntityType="Self.Civilite" />
+          <EntitySet Name="DynMenu" EntityType="Self.DynMenu" />
+          <EntitySet Name="Etat" EntityType="Self.Etat" />
+          <EntitySet Name="Extension" EntityType="Self.Extension" />
+          <EntitySet Name="ObjectMail" EntityType="Self.ObjectMail" />
+          <EntitySet Name="ORGANISATION" EntityType="Self.ORGANISATION" />
+          <EntitySet Name="SendedMail" EntityType="Self.SendedMail" />
+          <EntitySet Name="TypeFichier" EntityType="Self.TypeFichier" />
+          <EntitySet Name="UNITE" EntityType="Self.UNITE" />
+          <EntitySet Name="user_history" EntityType="Self.user_history" />
+          <AssociationSet Name="FK_AspNetUserLogins_AspNetUsers" Association="Self.FK_AspNetUserLogins_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
+          </AssociationSet>
+          <AssociationSet Name="FK__AspNetUse__Fk_Ci__398D8EEE" Association="Self.FK__AspNetUse__Fk_Ci__398D8EEE">
+            <End Role="Civilite" EntitySet="Civilite" />
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ORGANISATION_AspNetUsers" Association="Self.FK_ORGANISATION_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="ORGANISATION" EntitySet="ORGANISATION" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SendedMail_AspNetUsers" Association="Self.FK_SendedMail_AspNetUsers">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="SendedMail" EntitySet="SendedMail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DynMenu_DynMenu" Association="Self.FK_DynMenu_DynMenu">
+            <End Role="DynMenu" EntitySet="DynMenu" />
+            <End Role="DynMenu1" EntitySet="DynMenu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Extension_TypeFichier" Association="Self.FK_Extension_TypeFichier">
+            <End Role="TypeFichier" EntitySet="TypeFichier" />
+            <End Role="Extension" EntitySet="Extension" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SendedMail_ObjectMail" Association="Self.FK_SendedMail_ObjectMail">
+            <End Role="ObjectMail" EntitySet="ObjectMail" />
+            <End Role="SendedMail" EntitySet="SendedMail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ORGANISATION_ORGANISATION" Association="Self.FK_ORGANISATION_ORGANISATION">
+            <End Role="ORGANISATION" EntitySet="ORGANISATION" />
+            <End Role="ORGANISATION1" EntitySet="ORGANISATION" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ORGANISATION_UNITE" Association="Self.FK_ORGANISATION_UNITE">
+            <End Role="UNITE" EntitySet="UNITE" />
+            <End Role="ORGANISATION" EntitySet="ORGANISATION" />
+          </AssociationSet>
+          <AssociationSet Name="AspNetUserRoles" Association="Self.AspNetUserRoles">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+          </AssociationSet>
+          <AssociationSet Name="Menu_Role" Association="Self.Menu_Role">
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="DynMenu" EntitySet="DynMenu" />
+          </AssociationSet>
+          <EntitySet Name="Applications" EntityType="loginModel.Applications" />
+          <EntitySet Name="ApplicationsUsers" EntityType="loginModel.ApplicationsUsers" />
+          <AssociationSet Name="FK_ApplicationsUsers_Applications" Association="loginModel.FK_ApplicationsUsers_Applications">
+            <End Role="Applications" EntitySet="Applications" />
+            <End Role="ApplicationsUsers" EntitySet="ApplicationsUsers" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="Applications">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Url" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="NotUseLogin" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="ApplicationsUsers" Relationship="loginModel.FK_ApplicationsUsers_Applications" FromRole="Applications" ToRole="ApplicationsUsers" />
+        </EntityType>
+        <EntityType Name="ApplicationsUsers">
+          <Key>
+            <PropertyRef Name="FkApplications" />
+            <PropertyRef Name="FkUser" />
+          </Key>
+          <Property Name="FkApplications" Type="Int32" Nullable="false" />
+          <Property Name="FkUser" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Login" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UrlStart" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Applications" Relationship="loginModel.FK_ApplicationsUsers_Applications" FromRole="ApplicationsUsers" ToRole="Applications" />
+        </EntityType>
+        <Association Name="FK_ApplicationsUsers_Applications">
+          <End Type="loginModel.Applications" Role="Applications" Multiplicity="1" />
+          <End Type="loginModel.ApplicationsUsers" Role="ApplicationsUsers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Applications">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ApplicationsUsers">
+              <PropertyRef Name="FkApplications" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="loginModelStoreContainer" CdmEntityContainer="loginEntities">
+          <EntitySetMapping Name="Abonne">
+            <EntityTypeMapping TypeName="loginModel.Abonne">
+              <MappingFragment StoreEntitySet="Abonne">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Libelle" ColumnName="Libelle" />
+                <ScalarProperty Name="IdCRM" ColumnName="IdCRM" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetRoles">
+            <EntityTypeMapping TypeName="loginModel.AspNetRoles">
+              <MappingFragment StoreEntitySet="AspNetRoles">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserClaims">
+            <EntityTypeMapping TypeName="loginModel.AspNetUserClaims">
+              <MappingFragment StoreEntitySet="AspNetUserClaims">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="ClaimType" ColumnName="ClaimType" />
+                <ScalarProperty Name="ClaimValue" ColumnName="ClaimValue" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUserLogins">
+            <EntityTypeMapping TypeName="loginModel.AspNetUserLogins">
+              <MappingFragment StoreEntitySet="AspNetUserLogins">
+                <ScalarProperty Name="LoginProvider" ColumnName="LoginProvider" />
+                <ScalarProperty Name="ProviderKey" ColumnName="ProviderKey" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AspNetUsers">
+            <EntityTypeMapping TypeName="loginModel.AspNetUsers">
+              <MappingFragment StoreEntitySet="AspNetUsers">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Fk_Abonne" ColumnName="Fk_Abonne" />
+                <ScalarProperty Name="IdCRM" ColumnName="IdCRM" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="EmailConfirmed" ColumnName="EmailConfirmed" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="SecurityStamp" ColumnName="SecurityStamp" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="PhoneNumberConfirmed" ColumnName="PhoneNumberConfirmed" />
+                <ScalarProperty Name="TwoFactorEnabled" ColumnName="TwoFactorEnabled" />
+                <ScalarProperty Name="LockoutEndDateUtc" ColumnName="LockoutEndDateUtc" />
+                <ScalarProperty Name="LockoutEnabled" ColumnName="LockoutEnabled" />
+                <ScalarProperty Name="AccessFailedCount" ColumnName="AccessFailedCount" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Fk_Civilite" ColumnName="Fk_Civilite" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Civilite">
+            <EntityTypeMapping TypeName="loginModel.Civilite">
+              <MappingFragment StoreEntitySet="Civilite">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Libelle" ColumnName="Libelle" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DynMenu">
+            <EntityTypeMapping TypeName="loginModel.DynMenu">
+              <MappingFragment StoreEntitySet="DynMenu">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Libelle" ColumnName="Libelle" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="Icon" ColumnName="Icon" />
+                <ScalarProperty Name="Ordre" ColumnName="Ordre" />
+                <ScalarProperty Name="fk_menu" ColumnName="fk_menu" />
+                <ScalarProperty Name="Titre" ColumnName="Titre" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Etat">
+            <EntityTypeMapping TypeName="loginModel.Etat">
+              <MappingFragment StoreEntitySet="Etat">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Libelle" ColumnName="Libelle" />
+                <ScalarProperty Name="color" ColumnName="color" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Extension">
+            <EntityTypeMapping TypeName="loginModel.Extension">
+              <MappingFragment StoreEntitySet="Extension">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="ext" ColumnName="ext" />
+                <ScalarProperty Name="type" ColumnName="type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ObjectMail">
+            <EntityTypeMapping TypeName="loginModel.ObjectMail">
+              <MappingFragment StoreEntitySet="ObjectMail">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Libelle" ColumnName="Libelle" />
+                <ScalarProperty Name="IdModelCRM" ColumnName="IdModelCRM" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ORGANISATION">
+            <EntityTypeMapping TypeName="loginModel.ORGANISATION">
+              <MappingFragment StoreEntitySet="ORGANISATION">
+                <ScalarProperty Name="FK_USER" ColumnName="FK_USER" />
+                <ScalarProperty Name="FK_ORG" ColumnName="FK_ORG" />
+                <ScalarProperty Name="FK_SUP" ColumnName="FK_SUP" />
+                <ScalarProperty Name="ETAT" ColumnName="ETAT" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SendedMail">
+            <EntityTypeMapping TypeName="loginModel.SendedMail">
+              <MappingFragment StoreEntitySet="SendedMail">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Fk_User" ColumnName="Fk_User" />
+                <ScalarProperty Name="Fk_ObejctMail" ColumnName="Fk_ObejctMail" />
+                <ScalarProperty Name="IdMail" ColumnName="IdMail" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TypeFichier">
+            <EntityTypeMapping TypeName="loginModel.TypeFichier">
+              <MappingFragment StoreEntitySet="TypeFichier">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Libelle" ColumnName="Libelle" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UNITE">
+            <EntityTypeMapping TypeName="loginModel.UNITE">
+              <MappingFragment StoreEntitySet="UNITE">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="LIBELLE" ColumnName="LIBELLE" />
+                <ScalarProperty Name="idGroupe" ColumnName="idGroupe" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="user_history">
+            <EntityTypeMapping TypeName="loginModel.user_history">
+              <MappingFragment StoreEntitySet="user_history">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="fk_menu" ColumnName="fk_menu" />
+                <ScalarProperty Name="fk_user" ColumnName="fk_user" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="type" ColumnName="type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="AspNetUserRoles" TypeName="loginModel.AspNetUserRoles" StoreEntitySet="AspNetUserRoles">
+            <EndProperty Name="AspNetRoles">
+              <ScalarProperty Name="Id" ColumnName="RoleId" />
+            </EndProperty>
+            <EndProperty Name="AspNetUsers">
+              <ScalarProperty Name="Id" ColumnName="UserId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="Menu_Role" TypeName="loginModel.Menu_Role" StoreEntitySet="Menu_Role">
+            <EndProperty Name="AspNetRoles">
+              <ScalarProperty Name="Id" ColumnName="RoleId" />
+            </EndProperty>
+            <EndProperty Name="DynMenu">
+              <ScalarProperty Name="Id" ColumnName="Id" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <EntitySetMapping Name="Applications">
+            <EntityTypeMapping TypeName="loginModel.Applications">
+              <MappingFragment StoreEntitySet="Applications">
+                <ScalarProperty Name="NotUseLogin" ColumnName="NotUseLogin" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ApplicationsUsers">
+            <EntityTypeMapping TypeName="loginModel.ApplicationsUsers">
+              <MappingFragment StoreEntitySet="ApplicationsUsers">
+                <ScalarProperty Name="UrlStart" ColumnName="UrlStart" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="FkUser" ColumnName="FkUser" />
+                <ScalarProperty Name="FkApplications" ColumnName="FkApplications" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Aucun" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

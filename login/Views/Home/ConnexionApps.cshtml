@@ -1,0 +1,87 @@
+﻿
+@{
+    ViewBag.Title = "Connexion Apps";
+    Layout = "~/Views/Shared/_Layout2.cshtml";
+}
+
+<style>
+    body {
+        background: url(/Images/bg.png) no-repeat center center fixed;
+        background-size: auto auto;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }
+
+    img {
+        margin-top: 40vh; 
+        transform: translateY(-50%);
+        width: 100px
+    }
+</style>
+
+<body class="fond">
+    <center>
+        <img src="~/images/spinner.gif" alt="Wait" />
+
+        <div id="myDiv">
+            <div id="container"></div>
+            <div id="content-iframs" style="display: none;"></div>
+        </div>
+    </center>
+</body>
+
+<script>
+    
+
+
+    DsApplicationsUsers.read();
+
+    var Sites = DsApplicationsUsers.data();
+
+
+    var end = false;
+    var timer = null;
+
+    if (Sites != null && Sites.length != 0) {
+        for (var i = 0; i < Sites.length; i++) {
+            var s = Sites[i];
+            if (s.url[s.url.length - 1] == "/" && s.useLogin) { //  style="width: 100%;height: 900px;"
+                $("#content-iframs").append('<div><iframe src="' + s.url + 'Account/Login?Email=' + s.login + '&Password=' + s.password + '"></iframe></div>');
+            }
+            if (i == Sites.length - 1)
+                end = true;
+        }
+
+
+        timer = setInterval(function () {
+            if (loggedApps.length == Sites.length) {
+                console.log("url : ", "@ViewBag.appName")
+                var url = Sites.find(x => x.name === "@ViewBag.appName").urlStart;
+                console.log("url : ", url)
+                window.open(url, "_top");
+                kendo.ui.progress($("body"), false);
+            }
+        }, 500);
+    }
+
+    var loggedApps = [];
+
+    var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+    var eventer = window[eventMethod];
+    var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
+
+    eventer(messageEvent, function (e) {
+        var parts = e.data.split(',');
+        console.log(parts)
+        if (parts[0] == "hideGriser")
+            loggedApps.push(parts[1]);
+        else {
+            clearInterval(timer);
+            alert("Login ou mot de passe incorrect");
+        }
+    });
+
+
+</script>

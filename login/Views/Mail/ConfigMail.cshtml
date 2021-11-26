@@ -1,0 +1,66 @@
+﻿
+@{
+    ViewBag.Title = "ConfigMail";
+}
+
+<h2 style="color:#999999;">ConfigMail</h2>
+
+<div id="GridObjectMail" style="width:100%"></div>
+
+<script>
+
+    var DsObjectMail = new kendo.data.DataSource({
+        type: "aspnetmvc-ajax",
+        batch: true,
+        transport: {
+            read: {
+                url: URLROOT + "Mail/ReadObjectMail",
+                type: "POST"
+            },
+            create: {
+                url: URLROOT + "Mail/CreateObjectMail",
+                type: "POST"
+            },
+            update: {
+                url: URLROOT + "Mail/UpdatObjectMail",
+                type: "POST"
+            },
+            destroy: {
+                url: URLROOT + "Mail/DeleteObjectMail",
+                type: "POST"
+            }
+        },
+        schema: {
+            model: {
+                id: "id",
+                fields: {
+                    id: { type: "number" },
+                    lb: { type: "string" },
+                    idModelCRM: { type: "number" },
+                }
+            }
+        }
+    });
+
+
+    var gridMail = $("#GridObjectMail").kendoGrid({
+        toolbar: [{ name: "create", text: "" }, { name: "save", text: "" }, { name: "cancel", text: "" }],
+        dataSource: DsObjectMail,
+        columns: [
+            {
+                field: "lb",
+                title: "Model"
+            }, {
+                field: "idModelCRM",
+                title: "IdCRM"
+            },
+            {
+                command: { name: "destroy", text: "" },
+                title: ""
+            }
+        ],
+        editable : true,
+    }).data("kendoGrid");
+
+
+</script>

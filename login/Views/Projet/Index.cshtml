@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div style="width: 100%; max-width: 280px;margin-left: auto; margin-right: auto;">
+            <label>Nom du projet</label>
+            <input id="projectName" class="k-textbox" style="width: 100%; display: block;" />
+            <label>Chemin dossier base de données local</label>
+            <input id="dataBaseUrl" value="C:\ProjetsOMF2015\DATA" class="k-textbox" style="width: 100%; display: block;" />
+            <label>Nom du serveur local</label>
+            <input id="serverName" value="009S1\MSSQLSERVER2014" class="k-textbox" style="width: 100%; display: block;" />
+            <hr />
+            <div class="text-right">
+                <button class="btn btn-success" onclick="downLoad()">Telecharger</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function downLoad() {
+        var projectName = $("#projectName").val();
+        var dataBaseUrl = $("#dataBaseUrl").val();
+        var serverName = $("#serverName").val();
+        window.location = URLROOT + "Projet/DownLoad?projectName=" + projectName + "&dataBaseUrl=" + dataBaseUrl + "&serverName=" + serverName;
+        // window.open(URLROOT + "Projet/DownLoad?projectName=" + projectName + "&dataBaseUrl=" + dataBaseUrl + "&serverName=" + serverName);
+    }
+</script>

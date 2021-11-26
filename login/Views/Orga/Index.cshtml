@@ -1,0 +1,389 @@
+@model login.Models.ModeltreeOrg
+
+<script id="photo-template" type="text/x-kendo-template">
+    <div class='employe-photo' style='border: 2px solid;background-image: url("/PJ/Users/#:user#-small.jpg");'></div>
+    <span> #:lb# </span>
+</script>
+
+<script id="etat-template" type="text/x-kendo-template">
+    #:etatDS.get(etat).lb#
+</script>
+<style>
+    .employe-photo {
+        display: inline-block;
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background-size: 100% 100%;
+        background-position: center center;
+        vertical-align: middle;
+        line-height: 32px;
+        box-shadow: inset 0 0 1px #999, inset 0 0 10px rgba(0,0,0,.2);
+        margin-left: 5px;
+    }
+</style>
+@*
+    <style>
+        #content-images {
+            position: relative;
+            width: 70%;
+            height: 600px;
+            background-color: aqua;
+        }
+
+        .image-item {
+            position: absolute;
+            cursor: pointer;
+            width: 100px;
+            height: 200px;
+        }
+
+        #image1 {
+            left: 10px;
+            top: 10px;
+            background-color: red;
+            z-index: 3;
+        }
+
+        #image2 {
+            left: 40px;
+            top: 40px;
+            background-color: green;
+            z-index: 2;
+        }
+
+        #image3 {
+            left: 70px;
+            top: 70px;
+            background-color: yellow;
+            z-index: 1;
+        }
+    </style>
+
+    <div id="content-images">
+        <div id="image1" class="image-item"></div>
+        <div id="image2" class="image-item"></div>
+        <div id="image3" class="image-item"></div>
+    </div>
+
+    <script>
+        function getMaxZIndex() {
+            var zIndex = 0;
+            $(".image-item").each(function () {
+                var zi = parseInt($(this).css("z-index"));
+                if (zi > zIndex)
+                    zIndex = zi;
+            });
+            return zIndex;
+        }
+        $(".image-item").click(function () {
+            $(this).css("z-index", getMaxZIndex() + 1);
+        });
+    </script>
+*@
+
+<div class="panel panel-default">
+    <div class="panel-body" style="text-align:center;font-size:20px;">Gestion des organisations</div>
+    <div class="panel-body">
+        @if (ViewBag.isSelectedByAbonne)
+        {
+            <div>Abonne: <input id="drpAbonne" style="width: 250px;" /></div>
+        }
+        Organisation : <div id="CmbUnite" style="width: 222px;border-radius: 0;"></div>
+        <button id="btnUnit" class='btn btn-warning enrg' onclick="Unite()"><i class="fa fa-pencil"></i></button>
+        <button id="btnVis" class='btn btn-success enrg' onclick="Visualiser()"><i class="fa fa-object-group">Visualiser Diagram</i></button>
+    </div>
+    <div class="panel-body">
+        <div id="treelist"></div>
+    </div>
+</div>
+
+@if (ViewBag.isSelectedByAbonne)
+{
+    <script>
+
+        function ChangeAbonne() {
+
+            var value = this.value();
+            if (value != "")
+
+                selectedAbonne = value;
+            else
+                selectedAbonne = null;
+
+            CmbUnite.value(null);
+            treelist.dataSource.data([]);
+            $(".k-grid-toolbar>.k-grid-add").attr("disabled", "disabled");
+            DsUnite.read({ idAbonne: selectedAbonne });
+            DsUtilisateur.read();
+        }
+
+    </script>
+}
+
+<script>
+    DsUtilisateur.read();
+    etatDS.read();
+
+    var treelist = null;
+
+    $(document).ready(function () {
+        treelist = $("#treelist").kendoTreeList({
+            dataSource: {
+                serveroperation: false,
+                transport: {
+                    read: {
+                        url: URLROOT + "Orga/ReadAllTreeUserJAVA",
+                        dataType: "json"
+                    },
+                    update: {
+                        url: URLROOT + "Orga/UpdteOrga",
+                        dataType: "json"
+                    },
+                    create: {
+                        url: URLROOT + "Orga/CreateOrga",
+                        dataType: "json"
+                    },
+                    destroy: {
+                        url: URLROOT + "Orga/DestroyOrga",
+                        dataType: "json"
+                    },
+                    //parameterMap: function (options, operation) {
+                    //    if (operation !== "read" && options.models) {
+                    //        return { models: kendo.stringify(options.models) };
+                    //    }
+                    //}
+                },
+                schema: {
+                    model: {
+                        id: "user",
+                        parentId: "parentId",
+                        fields: {
+                            parentId: { from: "parentId", type: "string", nullable: true },
+                            user: { from: "user", type: "string" },
+                            lb: { from: "lb", type: "string" },
+                            org: { from: "org", type: "number" , defaultValue: "2"},
+                            etat: { from: "etat", type: "number", defaultValue: "3" }
+                        },
+                        expanded: true
+                    }
+                }
+            },
+            //height: 540,
+            toolbar: ["create"],
+            autoBind: false,
+            filterable: true,
+            sortable: true,
+            //editable: {
+            //    move: true
+            //},
+            edit: editEnt,
+            // dataBound: databound,
+            dragend: function(e) {
+                this.dataSource.sync();
+            },
+            editable: {
+                mode: "popUp",
+                move: true
+            },
+            columns: [
+                {
+                    width: 400, field: "user", title: "User", editor: EditUser, template: $("#photo-template").html()
+                },
+                {
+                    field: "etat", title: "Role", defaultValue: "3", editor: EditEtat, template: $("#etat-template").html()
+                },
+                {
+                    title: "Edit", command: ["createchild", "edit", "destroy"],
+                    attributes: {
+                        style: "text-align: center;width:340px;"
+                    }
+                },
+            ]
+        }).data("kendoTreeList");
+        $(".k-grid-toolbar>.k-grid-add").attr("disabled", "disabled");
+    });
+
+    //function databound(e) {
+    //    // TC(e);
+    //    $('tr').kendoDropTarget({
+    //        dragenter: function (e) {
+    //            $(this.element[0]).addClass('drop');
+    //        },
+    //        dragleave: function (e) {
+    //            $(this.element[0]).removeClass('drop');
+    //        },
+    //        drop: function (e) {
+    //            var dropped = $(e.dropTarget);
+    //            var dragged = $(e.draggable.currentTarget);
+
+    //            console.log(dropped.data("uid"));
+    //            console.log(dragged.data("uid"));
+    //            var datasource = $("#treelist").data("kendoTreeList").dataSource;
+    //            var dataitemp = datasource.getByUid(dropped.data("uid"));
+    //            var dataitemg = datasource.getByUid(dragged.data("uid"));
+    //            //TC(dataitemp);
+
+    //            //datasource.remove(dataitem);
+    //            //var groupId=dropped.data("id");
+
+    //            var mp = {
+    //                user: dataitemg.id,
+    //                org: $("#CmbUnite").data("kendoComboBox")._old,
+    //                parentId: dataitemp.id
+    //            }
+    //            $.ajax({
+    //                type: "POST",
+    //                url: URLROOT + "Orga/DragAndDrop",
+    //                data: { m: mp },
+    //                success: function (data) {
+    //                    if (data.success) {
+    //                        dataitemg.set("parentId", dataitemp.id);
+    //                        notification.show({
+    //                            title: "Success",
+    //                            message: "Le mouvement enregistrée avec success"
+    //                        }, "success");
+
+    //                    }
+    //                    else {
+    //                        if (data.errorList != undefined) {
+    //                            var str = "";
+    //                            $.each(data.errorList, function (key, value) {
+    //                                str += value.toString();
+    //                            });
+    //                            notification.show({
+    //                                title: "Erreur",
+    //                                message: str_
+    //                            }, "error");
+    //                        }
+    //                        else
+    //                            notification.show({
+    //                                title: "Erreur",
+    //                                message: data.str_
+    //                            }, "error");
+    //                    }
+    //                    data;
+    //                },
+    //            });
+    //        }
+    //    });
+    //}
+
+    //$('#treelist').kendoDraggable({
+    //    filter: 'tr',
+    //    hint: function (e) {
+    //        return e.clone();
+    //    },
+    //    //dragstart: function (e) {
+    //    //    $('tr').addClass('target');
+    //    //},
+    //    //dragend: function (e) {
+    //    //    $('tr')
+    //    //        .removeClass('target')
+    //    //        .removeClass('drop');
+    //    //}
+    //});
+
+    var DsUnite = new kendo.data.DataSource({
+        transport: {
+            read: {
+                //url: URLROOT + "Categorie/ReadAllCat",
+                url: URLROOT + "Orga/ReadUniteData",
+                dataType: "json",
+                type: "POST"
+            },
+        },
+        schema: {
+            model: {
+                id: "id",
+            }
+        },
+    });
+
+    var isSelectedByAbonne = @(Html.Raw(Json.Encode(ViewBag.isSelectedByAbonne)));
+
+    var CmbUnite = $("#CmbUnite").kendoComboBox({
+        dataTextField: "lb",
+        dataValueField: "id",
+        height: 200,
+        autoBind: !isSelectedByAbonne,
+        filter: "contains",
+        suggest: true,
+        minLength: 1,
+        change: onChangeSear,
+        dataSource: DsUnite
+    }).data("kendoComboBox");
+
+    function onChangeSear() {
+        var id = this.value();
+        console.log(id);
+        if (id != "") {
+            $("#treelist").data("kendoTreeList").dataSource.read({ org: id });
+            $(".k-grid-toolbar>.k-grid-add").removeAttr("disabled");
+        }
+    }
+
+    function myEditorOrg(container, options) {
+        //options.model.org = 2;
+        //TC(options.model.org);
+
+    }
+
+    function editEnt(e) {
+        //console.log("ass");
+        //e.model.org = $("#CmbUnite").data("kendoComboBox").value();
+        //TC(e.model.org);
+    }
+
+    function EditEtat(container, options) {
+        console.log("ass1");
+        $('<input id="etat" data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoDropDownList({
+                dataTextField: "lb",
+                dataValueField: "id",
+                dataSource: etatDS
+            });
+    }
+
+    function EditUser(container, options) {
+        console.log("ass2");
+        $('<input id="user" data-bind="value:' + options.field + '"/>')
+            .appendTo(container)
+            .kendoComboBox({
+                dataTextField: "name",
+                dataValueField: "id",
+                height: 200,
+                filter: "contains",
+                suggest: true,
+                minLength: 1,
+                template: '<div class="employe-photo" style="background-image: url(/PJ/Users/#:id#-small.jpg);height: 45px;width: 45px;margin: 2px;"><span style="margin-left: 50px;margin-top: 150px;">#:name#</span></div>',
+                dataSource: DsUtilisateur
+            });
+    }
+
+    function Visualiser() {
+        var id = $("#CmbUnite").data("kendoComboBox")._old;
+        var lb = $("#CmbUnite").data("kendoComboBox")._prev;
+        //TC(id);
+        if (id != undefined && id != "") {
+            createWnd("WindowOrga", "Orga/PartialOrga?ido=" + id, "Diagrame : " + lb, 1000, 900);
+            $("#WindowOrga").data("kendoWindow").open()//.maximize().center();
+            $("#WindowOrga").data("kendoWindow").maximize()
+        }
+        else {
+            $("#CmbUnite").data("kendoComboBox").focus()
+        }
+    }
+
+    function Unite() {
+        createWndL("WindowUnite", "Orga/UnitePartial", "Liste des Organisation ", 800, 600);
+        var win = $("#WindowUnite").data("kendoWindow");
+        win.open().center();
+    }
+
+    $(function () {
+        var wndH = $(window).height();
+        $('#treelist .k-grid-content').height(wndH - 280);
+    });
+</script>

@@ -1,0 +1,472 @@
+﻿@*@model SmartGep.Models.ModelLogigramme
+<div id="example">
+    <div id="treelist"></div>
+
+    <script id="photo-template" type="text/x-kendo-template">
+        <div class='employee-photo'
+             style='background-image: url(../content/web/treelist/people/#:data.EmployeeID#.jpg);'></div>
+        <div class='employee-name'>#: FirstName #</div>
+    </script>
+
+    <script>
+        var service = "//demos.telerik.com/kendo-ui/service";
+
+        $("#treelist").kendoTreeList({
+            dataSource: {
+                transport: {
+                    read: {
+                        url: service + "/EmployeeDirectory/All",
+                        dataType: "jsonp"
+                    }
+                },
+                schema: {
+                    model: {
+                        id: "EmployeeID",
+                        parentId: "ReportsTo",
+                        fields: {
+                            ReportsTo: { field: "ReportsTo",  nullable: true },
+                            EmployeeID: { field: "EmployeeId", type: "number" },
+                            Extension: { field: "Extension", type: "number" }
+                        }
+                    }
+                }
+            },
+            height: 540,
+            editable: {
+                move: true
+            },
+            columns: [
+                { field: "FirstName", title: "First Name", width: 280,
+                    template: $("#photo-template").html() },
+                { field: "LastName", title: "Last Name", width: 160 },
+                { field: "Position" }
+            ]
+        });
+    </script>
+
+    <style>
+        .employee-photo {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-size: 32px 35px;
+            background-position: center center;
+            vertical-align: middle;
+            line-height: 32px;
+            box-shadow: inset 0 0 1px #999, inset 0 0 10px rgba(0,0,0,.2);
+            margin-left: 5px;
+        }
+
+        .employee-name {
+            display: inline-block;
+            vertical-align: middle;
+            line-height: 32px;
+            padding-left: 3px;
+        }
+    </style>
+</div>
+
+<div>
+    <svg style="width:400px;height:600px;border:1px solid black;" data-options-fnct="Logigramme5684" data-options-fnc="57" class="fnl"><defs />
+    <g>
+        <g transform="matrix(1,0,0,1,0,0)">
+        <g transform="matrix(1,0,0,1,10,10)">
+            <g><circle transform="matrix(1,0,0,1,0,0)" stroke-width="1" stroke="#808080" r="43.5" fill="#dc2b2b" cy="43.5" cx="43.5" />
+            <g><text y="12" x="0" transform="matrix(1,0,0,1,6,35.5)" style="font:12px sans-serif;" stroke="none" fill="#000000">eeee&amp;éééééé</text></g></g></g>
+        <g transform="matrix(1,0,0,1,260,400)">
+            <g><circle transform="matrix(1,0,0,1,0,0)" stroke-width="1" stroke="#808080" r="42" fill="none" cy="42" cx="42" />
+            <g><text y="12" x="0" transform="matrix(1,0,0,1,18.5,34)" style="font:12px sans-serif;" stroke="none" fill="#000000">ssssççç</text></g></g></g>
+        <g transform="matrix(1,0,0,1,260,80)">
+            <g><path stroke-width="1" stroke="#808080" fill="#7aa0f8" d="M0 0 L 91 0 91 91 0 91Z" />
+            <g><text y="12" x="0" transform="matrix(1,0,0,1,24.5,37.5)" style="font:12px sans-serif;" stroke="none" fill="#000000">fffff132</text></g></g></g>
+        <g><g><path stroke-width="1" stroke="#979797" fill="none" d="M98 54 L 179 54 179 126 260 126" />
+            <circle transform="matrix(1,0,0,1,98,54)" stroke="none" r="4" fill="#000000" cy="0" cx="0" />
+            <path transform="matrix(1,0,0,1,250,121)" stroke="none" fill="#000000" d="M0 0 L 10 5 0 10 3 5Z" /></g><text y="15" x="0" transform="matrix(1,0,0,1,184,81)" style="font:15px sans-serif;" stroke="none" fill="#2e2e2e" /></g><g><g><path stroke-width="1" stroke-linejoin="undefined" stroke-linecap="undefined" stroke="#979797" fill="none" d="M306 172 L 306 286 302.5 286 302.5 400" /><circle transform="matrix(1,0,0,1,306,172)" stroke="none" r="4" fill="#000000" cy="0" cx="0" /><path transform="matrix(0,1,-1,0,307.5,390)" stroke="none" fill="#000000" d="M0 0 L 10 5 0 10 3 5Z" /></g><text y="15" x="0" transform="matrix(1,0,0,1,304.25,263)" style="font:15px sans-serif;" stroke="none" fill="#2e2e2e" /></g></g><g><g transform="matrix(1,0,0,1,250,70)" style="display:none;"><path stroke-width="1" stroke-linecap="butt" stroke-dasharray="1.5 3.5" stroke="#a7018f" fill="none" d="M0 0 L 113 0 113 113 0 113Z" /><path transform="matrix(1,0,0,1,-3.5,-3.5)" stroke-width="1" stroke="#282828" fill="#ffffff" d="M0 0 L 7 0 7 7 0 7Z" /><path transform="matrix(1,0,0,1,-3.5,52.5)" stroke-width="1" stroke="#282828" fill="#ffffff" d="M0 0 L 7 0 7 7 0 7Z" /><path transform="matrix(1,0,0,1,-3.5,110.5)" stroke-width="1" stroke="#282828" fill="#ffffff" d="M0 0 L 7 0 7 7 0 7Z" /><path transform="matrix(1,0,0,1,52.5,-3.5)" stroke-width="1" stroke="#282828" fill="#ffffff" d="M0 0 L 7 0 7 7 0 7Z" /><path transform="matrix(1,0,0,1,52.5,110.5)" stroke-width="1" stroke="#282828" fill="#ffffff" d="M0 0 L 7 0 7 7 0 7Z" /><path transform="matrix(1,0,0,1,110.5,-3.5)" stroke-width="1" stroke="#282828" fill="#ffffff" d="M0 0 L 7 0 7 7 0 7Z" /><path transform="matrix(1,0,0,1,110.5,52.5)" stroke-width="1" stroke="#282828" fill="#ffffff" d="M0 0 L 7 0 7 7 0 7Z" /><path transform="matrix(1,0,0,1,110.5,110.5)" stroke-width="1" stroke="#282828" fill="#ffffff" d="M0 0 L 7 0 7 7 0 7Z" /></g><g transform="matrix(1,0,0,1,260,80)" style="display:none;"><circle transform="matrix(1,0,0,1,0,0)" stroke-width="1" stroke="#ffffff" r="3.5" fill="#282828" cy="0" cx="45" /><circle transform="matrix(1,0,0,1,0,0)" stroke-width="1" stroke="#ffffff" r="3.5" fill="#282828" cy="90" cx="45" /><circle transform="matrix(1,0,0,1,0,0)" stroke-width="1" stroke="#ffffff" r="3.5" fill="#282828" cy="45" cx="0" /><circle transform="matrix(1,0,0,1,0,0)" stroke-width="1" stroke="#ffffff" r="3.5" fill="#282828" cy="45" cx="90" />
+        <circle transform="matrix(1,0,0,1,0,0)" stroke-width="1" stroke="#ffffff" r="3.5" fill="#282828" cy="45" cx="45" /></g></g></g>
+    </svg>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading ">
+        <label for="txtlog@(Model.id)">Nom </label> <input id="txtlog@(Model.id)" type="text" class="k-textbox area" value="Logigramme@(Model.fk_proc)" required />
+        <button id="save" class='btn btn-success enrg' type="button">Valider</button>
+        @*<div class="pull-right" style="margin-top: 8px;">
+                <div id="collog"></div>
+            </div>*@
+    </div>
+    <div class="panel-body">
+        <div style="height: 21px;margin: -16px 0 -6px;padding: 0;position: relative;float: right;">
+            <input id="diagramZoom" />
+            <input type="text" id="diagramZoomIndicator" class="k-textbox" value="100" style="height: 20px;padding: 0;top: -8px;width: 50px;" />
+        </div>
+        <div id="processFlowChart@(Model.id)" style="margin-top: 10px;"></div>
+    </div>
+</div>
+
+<script>
+    var logw=400;
+    var logh=600;
+
+    $("#processFlowChart@(Model.id)").css("width",logw);
+    $("#processFlowChart@(Model.id)").css("heigth",logh);
+
+    var dataShape= [];
+    var dataCon = [];
+    if (@Model.id!=0){
+        var json =  null;
+        @if (Model.doc != null) {
+            <text>
+        json = @Html.Raw(Model.doc);
+        </text> }
+        //var json = JSON.parse(text.replace(/&quot;/g, '"'));
+        console.log(json);
+        //var json = JSON.parse(text);
+        dataShape = json.shape;
+        dataCon = json.con;
+    }
+
+    function createProcessFlowChart(chartID, chartTitle) {
+        $(chartID).kendoDiagram({
+            edit: editDiag,
+            select: onSelect,
+            dragEnd: onDragEnd,
+            title: {
+                text: chartTitle
+            },
+            dataSource: {
+                data:dataShape,
+                schema: {
+                    model: {
+                        id: "id",
+                        fields: {
+                            id: { from: "id", type: "number", editable: false },
+                            name: { from: "name", type: "string" },
+                            width: { from: "width", type: "number", defaultValue: "80", editable: false },
+                            height: { from: "height", type: "number", defaultValue: "80", editable: false },
+                            acteur: { from: "acteur", type: "string", defaultValue: "1" },
+                            type: { from: "type", type: "string", defaultValue: "1" },
+                            doc: { from: "doc", type: "string" },
+                            x: { from: "x", type: "number", defaultValue: "10" , editable: false},
+                            y: { from: "y", type: "number", defaultValue: "10" , editable: false},
+                            fill:{from: "fill", type: "string", defaultValue: "#ffffff"}//
+                        },
+                    }
+                }
+            },
+            connectionsDataSource: {
+                data: dataCon,
+                schema: {
+                    model: {
+                        id: "id",
+                        fields: {
+                            id: { from: "id", type: "string" , editable: false},
+                            from: {  type: "number" },
+                            to: {  type: "number" },
+                            text: { type: "string" },
+                            fromX: {type: "number", editable: false},
+                            fromY: { type: "number" , editable: false},
+                            toX: {  type: "number" , editable: false},
+                            toY: {  type: "number", editable: false},
+                            fromConnector: {type: "string", editable: false},
+                            toConnector: { type: "string", editable: false}
+                        },
+                    }
+                }
+            },
+            //layout: {
+            //    type: "layered",
+            //    subtype: "down",
+            //    nodeDistance: 60,
+            //    layerSeparation: 60
+            //},
+            editable: true,
+            zoom: 1,
+            shapeDefaults: {
+                type: "rectangle",
+                fill: "#ffffff",
+                visual: function (options) {
+                    var diagram = kendo.dataviz.diagram;
+                    var dataItem = options.dataItem;
+                    var group = new diagram.Group();
+                    var w = options.width;
+                    var h = options.height;
+
+                    var layout = new diagram.Layout(new diagram.Rect(0, 0, options.width, options.height), {
+                        alignContent: "center",
+                        justifyContent: "center",
+                        spacing: 3
+                    });
+                    var lay;
+                    //TC(options)
+                    switch (dataItem.type) {
+                        case "1": lay = new diagram.Circle({
+                            width: options.width,
+                            height: options.height,
+                            fill: dataItem.fill
+                        });
+                            break;
+                        case "2": lay = new kendo.dataviz.diagram.Path({
+                            data: "M" + w / 4 + " " + h / 4 + " L " + w / 2 + " 0 " + w + " " + h / 2 + " " + w / 2 + " " + h + " " + w / 2 + " " + h + " 0 " + h / 2 + "Z",
+                            fill: dataItem.fill
+                        });
+                            break;
+                        case "3": lay = new diagram.Rectangle({
+                            width: options.width,
+                            height: options.height,
+                            fill: dataItem.fill
+                        });
+                            break;
+                        case "4": lay = new kendo.dataviz.diagram.Path({
+                            data: "m30,0 L90,0 L120,52 L90,104 L30,104 L0,52 z",
+                            fill: dataItem.fill
+                        });
+                            break;
+                        case "5": lay = new kendo.dataviz.diagram.Path({
+                            data: "M60 0 L 61 0 120 120 0 120Z",
+                            fill: dataItem.fill
+                        });
+                            break;
+
+                        case "7": lay = new kendo.dataviz.diagram.Path({
+                            data: "M0 0 L " + w*3 + " 0 " + w*3 + " " + h + " 0 " + h + "Z",//"M-60 2 L 60 0 60 60 -60 60Z",//"M0 0 L 60 0 60 60 0 60Z M0 0 L 60 0 60 60 0 60Z",
+                            fill: dataItem.fill
+                        });
+                            break;
+                    }
+
+                    group.append(lay);
+                    group.append(layout);
+
+                    var texts = dataItem.name.split(" ");
+                    for (var i = 0; i < texts.length; i++) {
+                        layout.append(new diagram.TextBlock({
+                            fontSize: 12,
+                            text: texts[i]
+                        }));
+                    }
+                    layout.reflow();
+                    return group;
+
+                },
+                width: 150,
+                height: 150,
+                hover: {
+                    fill: "#B9AD97"
+                }
+            },
+            connectionDefaults: {
+                stroke: {
+                    color: "#979797",
+                    width: 1
+                },
+                type: "cascading",
+                startCap: "FilledCircle",
+                endCap: "ArrowEnd",
+                content: {
+                    template: "#=templateconnect(dataItem.text)#"
+                }
+            },
+        });
+    }
+
+    //$("#collog").kendoColorPicker({
+    //    value: "#ffffff",
+    //    buttons: false,
+    //    select:Onselectcol
+    //});
+
+    //function Onselectcol(e)
+    //{
+    //    TC(e);
+    //}
+    createProcessFlowChart("#processFlowChart@(Model.id)", "SIMPLIFIED PROCESS FLOW ");
+    var diag = $("#processFlowChart@(Model.id)").getKendoDiagram()
+
+    $("#save").on("click", function () {
+        var obj = {};
+        obj.con = diag.connectionsDataSource.data().toJSON();
+        obj.shape = diag.dataSource.data().toJSON();
+
+        var logi = {
+            id:@Model.id,
+            name: $("#txtlog@(Model.id)").val(),
+            fk_proc: @Model.fk_proc,
+            doc: JSON.stringify(obj)
+        };
+        $.ajax({
+            url: URLROOT + "Orga/SaveLogigramme",
+            type: "POST",
+            data: JSON.stringify({ ml: logi }),
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            success: function (datares) {
+                if (datares.success) {
+                    diag.select($());
+                    if(@Model.id !=0)
+                    {
+                        TC("remove : " +  @Model.id);
+                        $("#EditC@(Model.fk_proc) svg[data-options-fnc="+ @Model.id +"]").remove()
+                    }
+                    var editor = $("#EditC@(Model.fk_proc)").data("kendoEditor")
+                    editor.exec("insertHtml" , { value: "<table> <tr> <td> <svg style='width:"+logw+"px;height:"+logh+"px;border:1px solid black;'"+
+                        " class='fnl' data-options-fnc='"+datares.res.id+"' data-options-fnct='"+
+                        $("#txtlog@(Model.id)").val()+"'>" + $("#processFlowChart@(Model.id) svg").html()+"</svg> </td> </tr> </table>" });
+                    $("#windowLog@(Model.fk_proc)").data("kendoWindow").close();
+
+
+                    @*TC(datares.res.id);
+                    diag.exportImage().done(function(data) {
+                        TC(data);
+                        var img = document.createElement("img");
+                        //  $(img).attr("width",400)
+                        //  $(img).attr("height",250)
+                        $(img).attr("class","fnl")
+                        $(img).attr("data-options-fnc",datares.res.id)
+                        $(img).attr("data-options-fnct",$("#txtlog@(Model.id)").val())
+                        img.src = data
+                        var preview = document.getElementById("EditC@(Model.fk_proc)");
+                        preview.appendChild(img);
+                        $("#windowLog@(Model.fk_proc)").data("kendoWindow").close();
+                    });*@
+                }
+                else {
+                    notification.show({
+                        title: "Erreur",
+                        message: datares.str_
+                    }, "error");}
+            }
+
+        });
+    });
+
+    function templateconnect(e) {
+
+        if(e!= undefined)
+        {   if(e!="")
+        {
+            return e;
+        }
+        else  {
+            return " ";
+        }
+        }
+        else{
+            return "";
+        }
+    }
+    function onSelect(e) {
+        var shape = kendo.dataviz.diagram.Shape;
+
+        if (e.deselected.length) {
+
+            var items = e.deselected;
+            $.map(items, function (item) {
+                if (item instanceof shape) {
+                    TC(item)
+                    item.dataItem.height=item._bounds.height;
+                    item.dataItem.width = item._bounds.width;
+                    item.dataItem.x=item._bounds.x;
+                    item.dataItem.y = item._bounds.y;
+                    item.redrawVisual();
+                }
+
+            });
+        }
+    }
+    function onDragEnd(e)
+    {
+        var shape = kendo.dataviz.diagram.Shape;
+        if (e.shapes.length) {
+            var items = e.shapes;
+            $.map(items, function (item) {
+                if (item instanceof shape) {
+                    item.dataItem.x=item._bounds.x;
+                    item.dataItem.y = item._bounds.y;
+                    item.redrawVisual();
+                }
+
+            });
+        }
+    }
+    function updateSliderIndicator(e) {
+        $("#diagramZoomIndicator").attr("value", e.value);
+        diag.zoom(e.value / 100);
+    }
+
+    $("#diagramZoom").kendoSlider({
+        min: 10,
+        max: 200,
+        value: 100,
+        smallStep: 10,
+        largeStep: 50,
+        tickPlacement: "none",
+        showButtons: false,
+        change: updateSliderIndicator,
+        slide: updateSliderIndicator
+    });
+
+    var dataforme = [{ id: "1", name: "Début / Fin" }, { id: "2", name: "Décision" }, { id: "3", name: "Processus 1" }, { id: "7", name: "Processus 2" }];
+    var dataacteur = [{ id: "1", lb: "Tout les peronnes" }, { id: "2", lb: "RQ" }, { id: "3", lb: "Demandeur" }, { id: "4", lb: "Direction" }];
+
+    function editDiag(e) {
+
+        if(e.shape != undefined && e.shape.id==0)
+        {
+            e.shape.id = Math.floor((Math.random() * 1000) + 1)
+        }
+
+        $("input[name='acteur']")
+            .kendoDropDownList({
+                dataTextField: "lb",
+                dataValueField: "id",
+                dataSource: {
+                    data: dataacteur,
+                    schema: {
+                        model: {
+                            id: "id",
+                            fields: {
+                                id: { type: "string" },
+                                lb: { type: "string" },
+                            },
+                        }
+                    }
+                }
+            });
+
+        $("input[name='type']").kendoDropDownList({
+            dataTextField: "name",
+            dataValueField: "id",
+            dataSource: {
+                data: dataforme,
+                schema: {
+                    model: {
+                        id: "id",
+                        fields: {
+                            id: { type: "string" },
+                            name: { type: "string" },
+                        },
+                    }
+                }
+            }
+        });
+
+        if(e.shape.fill=="#ffffff")
+        {
+            TC(e.shape.fill);
+            e.shape.fill=$("#collog").val();
+        }
+        //e.shape.fields.fill.defaultValue=$("#collog").val();
+        $("input[name='fill']").kendoColorPicker({
+            value: e.shape.fill ,
+            buttons: false,
+        });
+    }
+</script>
+
+<style>
+    .k-widget.k-dropdown.k-header.k-input.k-textbox {
+        padding: 0;
+        border: 0 none;
+    }
+</style>*@

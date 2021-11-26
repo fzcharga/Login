@@ -1,0 +1,217 @@
+@model IEnumerable<login.Models.DynMenu>
+@{
+    ViewBag.Title = "GererMenu";
+}
+<div class="col-md-3">
+    <div class="panel panel-default">
+        <div class="panel-heading ">
+            <h3 class="panel-title"><i class="fa fa-folder" onclick="expandCollapseTV('treeviewConfigMenu')" id="iconExpRep" style="cursor:pointer"></i> Menu</h3>
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                <input id="dropRoleMenu" class="form-item-drop" title="Selectionner un role"  style="max-width:100%"/>
+            </div>
+            <script>
+                var dd = @Html.Raw(Json.Encode(ViewData["roleMenu"]));
+                var dropRoleMenu = $("#dropRoleMenu").kendoDropDownList({
+                    optionLabel: "Selectionner un role",
+                    dataSource: dd,
+                    change: OnRoleChangeMenu,
+                    dataValueField:"id",
+                    dataTextField:"lb"
+                });
+            </script>
+            <div id="treeviewConfigMenu"></div>
+
+            <div id="dropRoleMenu"></div> <br /> <br /> <br />
+            <div class="form-group">
+                <button class="btn btn-primary form-item-btn" onclick="envoi()">Modifier</button>@*btn btn-default btn-lg form-item-btn*@
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<div id="treeviewConfigMenu"></div>
+
+<div class="body">
+    <div class="col-md-9">
+        <div class="panel panel-default">
+            <div class="panel-heading  text-center">
+                <h3 class="panel-title">Gerer menu</h3>
+            </div>
+            <div class="panel-body">
+                <div id="gridMenu"></div>
+                <script>
+
+                    var DsMenu = new kendo.data.DataSource({
+                        type: "aspnetmvc-ajax",
+                        transport: {
+                            read: {
+                                url: URLROOT + "Menu/ReadMenu",
+                                type:"POST",
+                                data: getdataMenu,
+                            },
+                            create:{
+                                url: URLROOT + "Menu/InsertMenu",
+                                type:"POST",
+                                data: getdataMenu
+                            },
+                            update:{
+                                url: URLROOT + "Menu/UpdateMenu",
+                                type:"POST"
+                            },
+                            destroy:{
+                                url: URLROOT + "Menu/DeleteMenu",
+                                type:"POST"
+                            }
+                        },
+                        schema: {
+                            model: {
+                                id: "Id",
+                                fields: {
+                                    Id: { type: "number" },
+                                    libelle: { type: "string" },
+                                    url: { type: "string" },
+                                    icon: { type: "string" },
+                                    fk_menu: { type: "number" },
+                                    titre: { type: "string" },
+                                    desc: { type: "string" },
+                                    ordre: { type: "number" },
+                                }
+                            }
+                        }
+                    });
+
+
+                    $("#gridMenu").kendoGrid({
+                        toolbar: [{ name: "create", text: "" }],
+                        dataSource: DsMenu,
+                        columns: [
+                            {
+                                field: "libelle",
+                                width: "20%"
+                            },
+                            {
+                                field: "url",
+                                width: "20%"
+                            },
+                            {
+                                field: "ordre",
+                                width: "15%"
+                            },
+                            {
+                                field: "titre",
+                                width: "15%"
+                            },
+                            {
+                                field: "desc",
+                                width: "15%"
+                            },
+                            {
+                                command: [{ name: "edit", text: "" }, { name: "destroy", text: "" }],
+                                width: "15%"
+                            },
+                        ],
+                        editable: "inline",
+                        sortable: true,
+                        filterable: true,
+
+                    });
+                </script>
+
+                @*@(Html.Kendo().Grid<CRM.Models.ModelMenu>()
+                    .Name("gridMenu")
+                                  .Columns(columns =>
+                                  {
+                                      columns.Bound(p => p.libelle).Width("15%");
+                                      columns.Bound(p => p.url).Width("15%");
+                                      //columns.Bound(p => p.icon).Width("10%");
+                                      columns.Bound(p => p.ordre).Width("5%");
+                                      columns.Bound(p => p.titre);
+                                      columns.Bound(p => p.desc);
+                                      columns.Command(p =>
+                                      {
+                                          p.Edit();
+                                          p.Destroy();
+                                      }).Width("10%");
+                                      //columns.Command(p => p.Edit());
+                                      //columns.Command(p => p.Destroy());
+                                  })
+                                    .Sortable()
+                                    .ToolBar(toolbar => toolbar.Create())
+                                    .Editable(editable => editable.Mode(GridEditMode.InLine))
+                                    .Filterable()
+                                    .DataSource(dataSource => dataSource
+                                    .Ajax()
+                                    // Pour faire l'ordre :  la methode (sort) c'est pour trier //
+                                    .Sort(sr => sr.Add(p => p.ordre).Ascending())
+                                        .Model(model =>
+                                        {
+                                            model.Id(p => p.Id);
+                                            model.Field(p => p.Id).Editable(false);
+                                            model.Field(p => p.libelle);
+
+
+                                        })
+                                                       .Read(read => read.Action("ReadMenu", "Menu").Data("getdataMenu"))
+                                                       .Create(create => create.Action("InsertMenu", "Menu").Data("getdataMenu"))
+                                               .Update(update => update.Action("UpdateMenu", "Menu"))
+                                               .Destroy(destroy => destroy.Action("DeleteMenu", "Menu"))
+                                   )
+                          )*@
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@*<ul id="menuP"></ul>*@
+
+<script>
+    $("#treeviewConfigMenu").kendoTreeView({
+        loadOnDemand: false,
+        autoBind: false,
+        dataSource: localDataSourceC,
+        select: function onSelect(e) {
+            $idGlobalmenu = this.dataItem(e.node).id;
+            $("#gridMenu").data("kendoGrid").dataSource.read();
+        },
+        checkboxes: {
+            checkChildren: true,
+            name: "checkedNodes"
+        }
+    });
+</script>
+
+<script>
+    function ReadMenu() {
+        $idGlobalmenu = null;
+        $("#gridMenu").data("kendoGrid").dataSource.read();
+        $("#treeviewConfigMenu").data("kendoTreeView").select($());
+    }
+
+</script>
+
+
+<style>
+    .k-treeview .k-checkbox {
+        opacity: 1;
+        width: auto;
+    }
+
+    .body-content {
+        max-width: 98% !important;
+    }
+
+    /*.col-md-3 {
+        padding-left: 0px;
+    }*/
+
+    .body-content {
+        padding-left: 0%;
+        padding-right: 0%;
+        padding-top: 7%;
+    }
+</style>

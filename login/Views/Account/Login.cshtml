@@ -1,0 +1,755 @@
+﻿@using login.Models
+@model ModelAccount
+@{
+    ViewBag.Title = "Connexion";
+    Layout = null;
+}
+<meta charset="utf-8" />
+<link rel="stylesheet" href="@Url.Content("~/Content/Site.css?v=1.1")" />
+
+<div id="notification" style="display:none;"></div>
+<div id="notificationNoHide" style="display:none;"></div>
+<script id="emailTemplate" type="text/x-kendo-template">
+    <div class="new-mail">
+        <h4><i class="fa fa-2x fa-envelope-o"></i> #= title #</h4>
+        <p>#= message #</p>
+    </div>
+</script>
+<script id="errorTemplate" type="text/x-kendo-template">
+    <div class="wrong-pass">
+        <h4><i class="fa fa-2x fa-exclamation-triangle"></i> #= title #</h4>
+        <p>#= message #</p>
+    </div>
+</script>
+<script id="successTemplate" type="text/x-kendo-template">
+    <div class="upload-success">
+        <h4><i class="fa fa-2x fa-check"></i> #= title #</h4>
+        <p>#= message #</p>
+    </div>
+</script>
+
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>login</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2019.1.220/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="http://kendo.cdn.telerik.com/2019.1.220/styles/kendo.fiori.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="http://kendo.cdn.telerik.com/2019.1.220/js/jquery.min.js"></script>
+    <script src="http://kendo.cdn.telerik.com/2019.1.220/js/kendo.all.min.js"></script>
+    <script src="@Url.Content("~/Scripts/notifications.js?v=1")"></script>
+    <script src="@Url.Content("~/Scripts/backstretch.min.js")"></script>
+    <script>
+        var URLROOT = "@Url.Content("~/")";
+    </script>
+    @Styles.Render("~/Content/font-awesome.min.css")
+
+    <style>
+        a {
+            color: #97a7ac;
+        }
+
+        /*.row {
+            text-align: center;
+        }*/
+
+        .row a {
+            color: #97a7ac;
+            font-weight: bold;
+        }
+
+        @@font-face {
+            font-family: "ANTONIO";
+            src: url('../fonts/Antonio-Regular.ttf');
+        }
+
+        .bcl {
+            /*background-color: white;*/
+            /* background-color: white; */
+            /*height: auto;*/
+            /*display: flex;
+            flex-direction: row;*/
+        }
+
+        .nom {
+            padding: 0px !important;
+        }
+
+        .prenom {
+            padding-right: 0px !important;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus,
+        button:focus {
+            outline: none;
+        }
+
+        ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+            color: #97a7ac; /*#ffffff59;*/
+            opacity: 2; /* Firefox */
+            padding-left: 5px;
+        }
+
+        #forget {
+            color: #ffffff59;
+            font-size: 12px;
+        }
+
+        #btnseconnecter, #btnEnvoyer, #btnLien {
+            background-color: #536a79;
+            color: white;
+            border: none;
+            font-family: inherit;
+            margin-bottom: 19px;
+            border-radius: 4px;
+            width: calc(100% - 44px);
+            height: 28px;
+        }
+
+        #login, #password, #statut, #organisation, #Telephone, #email, #passwordC, #nom, #prenom, #civilite {
+            line-height: 2;
+            width: 100%;
+            margin-bottom: 12px;
+            background-color: transparent;
+            border: 1px solid #eaf0f3;
+            border-radius: 5px;
+            padding-left: 25px;
+        }
+
+        .row .connexion {
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+        .connexion {
+            height: 80px;
+            font-size: 15px;
+            font-family: inherit;
+            font-weight: bold;
+            color: corodiva;
+            color: #5b7685;
+        }
+
+        #formulaire {
+            margin-left: 0px !important;
+        }
+
+        #logo {
+            width: 160px;
+            margin-top: 0px;
+            float: unset;
+            margin-bottom: 26px;
+        }
+
+        #img {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            /*background-image: url('../../img/bg.jpg');*/
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            background-color: #464646;
+        }
+
+        #title {
+            font-family: ANTONIO;
+            font-size: 25px;
+            font-weight: bold;
+            color: #032738;
+            float: right;
+        }
+
+
+        /*#contentLogin {
+            max-width: 0px;
+            width: 100%;
+            margin-left: 70%;
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            height: 440px;
+            box-shadow: 0px 0px 15px #aaa;
+            position: relative;
+            margin-top: 25%;
+        }*/
+
+        #formLogin {
+          
+            right: 10%;
+            top: calc(50% - 200px);
+            position: fixed;
+            border-bottom-right-radius: 12px;
+            border-top-right-radius: 12px;
+            border-bottom-left-radius: 12px;
+            border-top-left-radius: 12px;
+            padding: 53px;
+            padding-left: 60px;
+            padding-right: 70px;
+            background-color: white;
+            box-shadow: 1px 10px 10px #888888;
+            z-index: 99;
+            width: 500px;
+            height: 330px;
+        }
+
+        #logoApp {
+            width: 130px;
+            margin-bottom: 10px;
+        }
+
+        #rememberMe {
+            color: grey;
+            font-weight: normal;
+            margin-left: 20px;
+            font-size: 12px;
+        }
+
+
+
+        #formImage {
+            border-bottom-left-radius: 5px;
+            border-top-left-radius: 5px;
+            background-color: white;
+            /*z-index: 1000;*/
+            /*width: 300px;*/
+            height: 440px;
+            background-image: url(/img/img_login.png);
+            background-repeat: no-repeat;
+            background-size: 100% auto;
+            background-position: center;
+        }
+
+        .cercle-right {
+            position: absolute;
+            bottom: -14px;
+            left: calc(50% - 12px);
+            transform: rotate(90deg);
+            display: block;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            z-index: 1 !important;
+            background-color: white;
+        }
+
+        #btnSwitch {
+            position: absolute;
+            right: -108px;
+            height: 35px;
+            width: 178px;
+            top: 46%;
+            -ms-transform: rotate(270deg);
+            transform: rotate(270deg);
+            background-color: white;
+            z-index: 10;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            font-size: 18px;
+            padding-top: 5px;
+            cursor: pointer;
+            font-family: inherit;
+            color: #657dbe;
+            -moz-box-shadow: inset 0 10px 10px -10px grey;
+            -webkit-box-shadow: inset 0 10px 10px -10px grey;
+            box-shadow: inset 0 8px 10px -10px grey;
+        }
+
+        #formNav {
+            /* width: 100%; */
+            /*max-width: 30px !important;*/
+            min-height: 135px;
+            min-width: 30px;
+            height: 133px;
+            margin-top: 15%;
+        }
+
+        #dvCircleRight {
+            padding-top: 22%;
+            width: 10px;
+        }
+
+        /*______________ footer : ____________*/
+
+        footer {
+            POSITION: relative;
+            left: 0%;
+            top: 15px;
+            color: #8799a2;
+        }
+
+            footer p {
+                float: left;
+            }
+
+        .dot {
+            /*color: black;
+            height: 20px;
+            width: 20px;
+            position: relative;
+            border-radius: 50%;
+            border: 1px solid black;
+            padding: 2px;
+            font-size: 8px;
+            left: 83%;*/
+            color: black;
+            position: relative;
+            border-radius: 50%;
+            border: 1px solid black;
+            padding: 2px;
+            font-size: 10px;
+            height: 20px;
+            width: 20px;
+            margin: 2%;
+            text-align: center;
+            left: 81%;
+        }
+
+        .S_media {
+            position: absolute;
+            display: inline-flex;
+            top: 101%;
+            right: 61px;
+        }
+        /*.dot {
+            color: black;
+            position: relative;
+            border-radius: 50%;
+            border: 1px solid black;
+            padding: 2px;
+            font-size: 10px;
+            height: 20px;
+            width: 20px;
+            margin: 2%;
+            text-align: center;
+            left: 81%;
+        }
+
+        .S_media {
+            position: absolute;
+            display: inline-flex;
+            top: 101%;
+            right: 17%;
+        }*/
+
+        #facebook {
+            right: 104px;
+        }
+
+        #youtube {
+            right: 65px;
+        }
+
+        #twitter {
+            right: 124px;
+        }
+
+        #linkedin {
+            right: 84px;
+        }
+
+        #dvCircleRight-item {
+            background-color: white;
+            border-bottom-right-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .copyright {
+            position: absolute;
+            bottom: -33px;
+            left: 0;
+        }
+        /*_________________ fa ___________________*/
+
+        .fa-chevron-right {
+            color: #657dbe;
+            /* transform: rotate(90deg); */
+            position: relative;
+            top: 5px;
+            left: 2px;
+        }
+        /*_________________ checkbox _____________*/
+
+        input[type=checkbox] + label {
+            display: block;
+            margin: 0.2em;
+            cursor: pointer;
+            /*padding: 0.2em;*/
+            color: #97a7ac;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+            /*input[type=checkbox] {
+            display: none;
+        }*/
+
+            input[type=checkbox] + label:before {
+                content: "\2714";
+                border: 0.1em solid #ebf0f3;
+                /*border-radius: 0.2em;*/
+                display: inline-block;
+                width: 1.5em;
+                height: 1.5em;
+                /*padding-left: 0.2em;
+                padding-bottom: 0.3em;*/
+                margin-right: 0.2em;
+                vertical-align: bottom;
+                color: transparent;
+                transition: .2s;
+            }
+
+            input[type=checkbox] + label:active:before {
+                transform: scale(0);
+            }
+
+        input[type=checkbox]:checked + label:before {
+            background-color: #6bb4e4;
+            border-color: #6bb4e4;
+            color: #fff;
+            text-align: center;
+        }
+
+        input[type=checkbox]:disabled + label:before {
+            transform: scale(1);
+            border-color: #aaa;
+        }
+
+        input[type=checkbox]:checked:disabled + label:before {
+            transform: scale(1);
+            background-color: #bfb;
+            border-color: #bfb;
+        }
+
+        #contentCheckbox {
+            position: relative;
+            text-align: left;
+            margin-bottom: 5%;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: -1px;
+            left: 23px;
+            height: 13px;
+            width: 13px;
+            background-color: #eee;
+        }
+
+
+        /*_________________ radio _____________*/
+        .customButtonGroup .k-checkbox-label:before,
+        .customButtonGroup .k-checkbox-label:after {
+            display: none;
+        }
+
+        .customButtonGroup .k-checkbox-label {
+            color: #fff;
+            border-color: #363940;
+            background-color: #363940;
+            display: inline-block;
+            padding: 2px 7px 2px;
+            line-height: 1.72em;
+            width: 135px;
+            /*float: left;*/
+        }
+
+            .customButtonGroup .k-checkbox-label:first-of-type {
+                border-radius: 4px 0 0 4px;
+            }
+
+            .customButtonGroup .k-checkbox-label:last-of-type {
+                border-radius: 0 4px 4px 0;
+            }
+
+        .customButtonGroup .k-checkbox:checked + .k-checkbox-label {
+            color: #fff;
+            background-image: linear-gradient(to right,#657dbe, #6bb4e4);
+            /*background-color: #10c4b2;
+            border-color: #10c4b2;*/
+        }
+
+        @@media screen and (max-width: 968px) {
+
+            #btnseconnecter {
+                width: calc(100% - 10px);
+            }
+            .margF {
+                margin-right: 0px;
+                margin-left: 0px;
+            }
+
+            #formLogin {
+                width: 90%;
+                margin-left: 5%;
+                margin-right: 5%;
+                right : 0px;
+            }
+
+            #contentLogin {
+                margin-left: 0px;
+            }
+
+            .copyright {
+                position: absolute;
+                /*bottom: -532px !important;*/
+                bottom: -191px !important;
+                left: 0;
+            }
+
+            body {
+                background-image: none !important;
+                background-color: white !important;
+                padding: 0;
+            }
+
+            /*#contentLogin {
+                margin-top: 0 !important;
+                box-shadow: none !important;
+            }*/
+
+            .fa-chevron-right {
+                color: white !important;
+            }
+
+            .cercle-right {
+                position: absolute;
+                bottom: -11px;
+                left: 42%;
+                transform: rotate(90deg);
+                display: block;
+                border-radius: 50%;
+                z-index: 1 !important;
+                color: white !important;
+                /*width: 17px !important;
+                height: 25px !important;
+                padding-top: 1px;*/
+                background-color: #6bb4e4 !important;
+            }
+
+            .S_media {
+                top: 114% !important;
+            }
+
+            #btnSwitch {
+                transform: none !important;
+                /*height: 30px !important;*/
+                left: 40% !important;
+                top: 100% !important;
+                color: white !important;
+                background-color: #6bb4e4 !important;
+            }
+        }
+
+
+        /*_________________ radio _____________*/
+    </style>
+</head>
+<body>
+   
+    <div class="container" style="padding: 0;">
+        <div class="row margF">
+            <div id="contentLogin">
+                <div id="formLogin" class="col-md-12 col-sm-12">
+                    <div id="dvSignup" style="display:none;">
+                        @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="row connexion" style="height:50px;">
+                                <span class='connexion'>Inscrivez-vous</span>
+                            </div>
+                            <div class="row" id="formulaire">
+                                <div class="col-md-12">
+                                    <select id="civilite" name="RegisterViewModel.idCivilite">
+                                        <option value="1">M.</option>
+                                        <option value="2">Mme.</option>
+                                        <option value="3">Mlle.</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-12">
+                                    @Html.TextBoxFor(m => m.RegisterViewModel.Email, new { placeholder = "Email", @id = "email" })
+                                </div>
+                                <div class="col-md-12">
+                                    @Html.TextBoxFor(m => m.RegisterViewModel.Name, new { placeholder = "Login", @id = "login" })
+                                </div>
+                                <div class="col-md-12">
+                                    @Html.PasswordFor(m => m.RegisterViewModel.Password, new { placeholder = "Mot de passe", @id = "password" })
+                                </div>
+                                <div class="col-md-12">
+                                    @Html.PasswordFor(m => m.RegisterViewModel.ConfirmPassword, new { placeholder = "Confirmation du Mot de passe", @id = "passwordC" })
+                                </div>
+                                <div class="col-md-12">
+                                    <input id="btnEnvoyer" type="submit" value="Envoyer" />
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div id="dvLogin" style="position: relative;">
+                        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl, appName = ViewBag.appName }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="row">
+                                @*@if (ViewBag.appName != null && Outils.GetIdApplication(ViewBag.appName) != 0)
+                                {*@
+                                    <img id="logoApp" src="@Url.Content(Outils.GetUrlImage(ViewBag.appName, "logo"))" />
+                                @*}
+                                else
+                                {
+                                    <img id="logoApp" src="@Url.Content("~/images/Applications/logo.png")" />
+                                }*@
+
+
+                                <div class="row">
+                                    <p></p>
+                                </div>
+                            </div>
+                            <div class="row" id="formulaire">
+                                <div class="row">
+                                    @Html.TextBoxFor(m => m.LoginViewModel.Email, new { placeholder = "Nom d'utilisateur", @id = "login" })
+                                </div>
+                                <div class="row">
+                                    @Html.PasswordFor(m => m.LoginViewModel.Password, new { placeholder = "Mot de passe", @id = "password" })
+                                    @Html.ValidationMessageFor(m => m.LoginViewModel.Password, "", new { @class = "text-danger" })
+                                </div>
+
+
+                                <div class="row">
+                                    <div id="contentCheckbox">
+                                        <input class="checkmark" type="checkbox"><label id="rememberMe" for="checksevepassword"> Se rappeler de moi</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <input id="btnseconnecter" type="submit" value="CONNEXION" />
+                                </div>
+                            </div>
+                        }
+                        <div style="position: absolute;right: -30px; bottom: 6px;">
+                            @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        jQuery(document).ready(function (cash) {
+            $.backstretch([
+                "@Url.Content(Outils.GetUrlImage(ViewBag.appName, "back"))",
+            ]);
+        });
+
+    </script>
+    @Scripts.Render("~/bundles/bootstrap")
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
+    @Scripts.Render("~/bundles/bootstrap")
+    <script>
+
+        //function openvideo() {
+        //    window.open("https://www.youtube.com/watch?v=-P877umpYlI", '_blank');
+        //}
+
+        //function showLoad() {
+        //    kendo.ui.progress($("body"), true);
+        //}
+
+        //function hideLoad() {
+        //    kendo.ui.progress($("body"), false);
+        //}
+
+        //localStorage.removeItem('MenuP');
+        //var togl = "false";
+
+        //function verifMail(email, callBack) {
+        //    $.ajax({
+        //        url: URLROOT + "Abonne/ExistMail",
+        //        type: "POST",
+        //        data: {
+        //            email: email
+        //        },
+        //        success: function (data) {
+        //            callBack(data);
+        //        }
+        //    })
+        //}
+
+        //function validateEmail(email, callBack) {
+        //    var re = /^(([^<>()[\]\\.,;:\s@@\"]+(\.[^<>()[\]\\.,;:\s@@\"]+)*)|(\".+\"))@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        //    callBack(re.test(email));
+        //}
+
+        //$("input[name='type-abonne']").change(function () {
+        //    var type = $("input[name='type-abonne']:checked").val();
+        //    if (type == "1") {
+        //        $("#organisation").attr("placeholder", "Entreprise");
+        //    }
+        //    if (type == "2") {
+        //        $("#organisation").attr("placeholder", "Particulier");
+        //    }
+        //});
+
+        //$("#btnEnvoyer").click(function () {
+        //    showLoad();
+        //    var email = $("#email").val();
+        //    var organisation = $("#organisation").val();
+        //    if (organisation != "" && email != "") {
+        //        validateEmail(email, function (res) {
+        //            if (res) {
+        //                verifMail(email, function (resExist) {
+        //                    if (!resExist) {
+        //                        localStorage.setItem("organisation", organisation);
+        //                        localStorage.setItem("email", email);
+        //                        var type = $("input[name='type-abonne']:checked").val();
+        //                        localStorage.setItem("type", type);
+        //                        window.location = URLROOT + "G_Users/Index";
+        //                    } else {
+        //                        hideLoad();
+        //                        notification.show({ title: "", message: "adresse mail existe déjà" }, "error");
+        //                        $("#emailC").css('border-color', 'red');
+        //                    }
+        //                });
+        //            } else {
+        //                hideLoad();
+        //                notification.show({ title: "", message: " Email incorrect" }, "error");
+        //            }
+        //        });
+        //    } else {
+        //        hideLoad();
+        //        notification.show({ title: "", message: "Remplir les champs: ( Organisation et Email )" }, "error")
+        //    }
+        //});
+
+        //$("#btnSwitch").click(function () {
+
+        //    $("#dvLogin").toggle();
+        //    $("#dvSignup").toggle();
+
+        //    if (togl == "true") {
+        //        togl = "false";
+        //        $("#btnSwitchText").text("INSCRIVEZ-VOUS");
+        //    } else {
+        //        togl = "true";
+        //        $("#btnSwitchText").text("SE CONNECTER");
+        //    }
+        //});
+        ///*_________________________________________________________*/
+        //$(document).ready(function () {
+        //    if (window.location.hash == "#inscription")
+        //        $("#btnSwitch").click();
+        //})
+
+    </script>
+
+</body>
+</html>

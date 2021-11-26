@@ -1,0 +1,1518 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<script>
+        var isManager = @Html.Raw(Json.Encode(User.IsInRole("Manager")));
+        var organisation = localStorage.getItem("organisation");
+        var mailAbonne = localStorage.getItem("email")
+            var typeAbonne = localStorage.getItem("type");
+            if (organisation == null && !isManager)
+            window.location = URLROOT + "Account/Login";
+</script>
+
+<style>
+    h2 {
+        color: black;
+    }
+
+    #listViewCollab, #listViewManage {
+        /*padding: 20px;*/
+    }
+
+    .User {
+        border-radius: 2px;
+        margin: 5px;
+    }
+
+    .contentAll {
+        background-image: url(../../img/backgrnd_c.png) !important;
+        background-position: bottom left;
+        background-size: cover;
+        background-position-y: 0px;
+        background-repeat: round;
+    }
+
+    #btnSuivantStep1 {
+        margin-top: 40px;
+        text-align: left;
+        position: relative;
+        max-width: 95%;
+        width: 100%;
+        height: 100px;
+        max-height: 55px;
+        font-weight: bolder;
+        font-family: "Montserrat",sans-serif;
+        border-radius: 0% / 2% / 10% / 10% !important;
+        border-radius: 0px 40px 40px 40px;
+        text-align: center;
+        background-image: linear-gradient(to right,#273491, #5089c8);
+        border: none !important;
+        color: white !important;
+        font-size: 25px;
+    }
+
+    /*#btnValideStp1, #btnValideStp2 {
+        background-color: #93aab3;
+        border: none;
+        display: none;
+        border-radius: 3px;
+        float: right;
+        right: 0px;
+        width: 31%;
+        /*position: absolute;*/
+    }
+
+    */
+    /*______________________________________________________________________________*/
+    input[type="number"] {
+        -webkit-appearance: textfield;
+        -moz-appearance: textfield;
+        appearance: textfield;
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+    }
+
+    .number-input {
+        border: 0;
+        display: inline-flex;
+        position: relative;
+        width: 200px;
+        height: 200px;
+    }
+
+    .inputTxt {
+        width: 100%;
+        max-width: 99%;
+        border-color: #dee3e5;
+        height: 30px;
+        font-family: ClearSans-Medium !important;
+        /* font-size: 15px; */
+        font-weight: 100;
+        padding-left: 3%;
+        color: #85989f;
+    }
+
+    .border-error {
+        border: 1px solid red;
+    }
+
+    .number-input,
+    .number-input * {
+        box-sizing: border-box;
+    }
+
+        .number-input button {
+            outline: none;
+            -webkit-appearance: none;
+            position: absolute;
+            /*background-color: #566d7a;*/
+            background-image: linear-gradient(to right,#273491, #5089c8);
+            border: none;
+            top: calc(50% - 1.5rem);
+            color: white !important;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            margin: 0;
+            box-shadow: 0px 0px 1px #474747;
+            border-radius: 50%;
+        }
+
+            .number-input button.right {
+                right: -30px;
+            }
+
+            .number-input button.left {
+                left: -30px;
+            }
+
+            .number-input button:before,
+            .number-input button:after {
+                display: inline-block;
+                position: absolute;
+                content: '';
+                width: 1rem;
+                height: 2px;
+                background-color: white;
+                transform: translate(-50%, -50%);
+            }
+
+            .number-input button.plus:after {
+                transform: translate(-50%, -50%) rotate(90deg);
+            }
+
+        .number-input input[type=number] {
+            font-family: sans-serif;
+            padding: .5rem;
+            border: none;
+            font-size: 150px;
+            height: 3rem;
+            font-weight: bold;
+            border-color: #7e9299;
+            text-align: center;
+            color: #fb16ce;
+        }
+
+    @@media screen and (max-width: 768px) {
+        #defaultForm {
+            margin-top: 10%;
+        }
+    }
+    /*____________________________________________________*/
+    #contentManag {
+        text-align: center;
+        background-color: white;
+        display: grid;
+        padding: 50px;
+        width: 300px;
+        float: right;
+        z-index: 1;
+        border-radius: 3px;
+        box-shadow: 1px 1px 5px #7e9299;
+    }
+
+    #contentCollab {
+        text-align: center;
+        background-color: white;
+        display: grid;
+        padding: 50px;
+        width: 300px;
+        float: left;
+        border-radius: 3px;
+        box-shadow: 1px 1px 5px #7e9299;
+    }
+
+    .lbRole {
+        display: inline-block;
+        margin-bottom: 5px;
+        font-family: fantasy;
+        font-size: 25px;
+        text-transform: uppercase;
+        background: linear-gradient(to right, #fb16ce 0%, #4d079d 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .headCollab {
+        background-color: #93aab3 !important;
+        background-image: linear-gradient(to right,#273491, #5089c8);
+        border-radius: 0px 40px 0px 0px;
+    }
+
+    .headManag {
+        background-color: #6b78b9 !important;
+        background-image: linear-gradient(to right,#273491, #5089c8);
+        border-radius: 0px 40px 0px 0px;
+    }
+
+    .k-listview {
+        border: none;
+    }
+
+    #titleC {
+        color: white;
+    }
+
+    #titleM {
+        color: white;
+    }
+
+    h2 {
+        margin: 0px;
+    }
+
+    .rows {
+        margin: 2%;
+    }
+
+    .rowsDrop {
+        margin: 0;
+        margin-left: 2%;
+    }
+
+    /*input, select, textarea {
+        color: white !important;
+    }*/
+
+    .panel-body {
+        padding: 15px;
+        padding-right: 35px !important;
+    }
+
+    .k-dropdown-wrap {
+        background-color: #e4eff4;
+        border: none;
+    }
+
+    .k-pager-numbers {
+        display: none;
+        visibility: hidden;
+    }
+
+    .k-pager-first, .k-pager-last {
+        display: none;
+        visibility: hidden;
+    }
+
+    .btnNext {
+        padding: 0 6px;
+        background-color: #93aab3 !important;
+        color: white !important;
+        text-decoration: none;
+        position: relative !important;
+        float: right !important;
+        width: 45%;
+    }
+
+    .btnLast {
+        padding: 0 6px;
+        background-color: #becbd1 !important;
+        color: white !important;
+        text-decoration: none;
+        width: 45%;
+    }
+
+    .k-pager-info {
+        display: none !important;
+    }
+
+    ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+        color: #85989f;
+        opacity: 1; /* Firefox */
+    }
+
+    .k-dropdown-wrap .k-input {
+        color: #85989f;
+        font-family: sans-serif !important;
+        font-size: 15px;
+        text-align: left;
+        font-weight: 800;
+        padding-left: 2%;
+    }
+
+        .k-dropdown-wrap .k-input:hover {
+            color: #85989f;
+        }
+
+    .labelPssw {
+        color: #85989f;
+    }
+
+    #contentAll {
+        display: none;
+        text-align: center;
+    }
+
+    .panel-primary {
+        margin: 10%;
+        box-shadow: 1px 1px 5px #7e9299;
+        border-radius: 0px 40px 40px 40px;
+    }
+
+    /*.body-content {
+        padding-top: 10%;
+    }*/
+
+    a > k-link k-pager-nav:active {
+        text-decoration: none;
+        background-color: unset;
+    }
+
+    .k-i-arrow-60-left:before {
+        display: none;
+    }
+
+    .k-i-arrow-60-right:before {
+        display: none;
+    }
+
+    /*.btnprécedent {
+        font-weight: bold;
+        font-family: "Montserrat",sans-serif !important;
+        position: absolute;
+        z-index: 10;
+        float: left;
+        width: 44%;
+        right: 35px;
+        margin-right: 2px;
+        border: none;
+        border-radius: unset;
+        background-color: #6b78b9;
+    }
+
+    .btnpoursuivre {
+        font-weight: bold;
+        font-family: "Montserrat",sans-serif !important;
+        position: absolute;
+        z-index: 10;
+        float: left;
+        width: 44%;
+        right: 35px;
+        margin-right: 2px;
+        border: none;
+        border-radius: unset;
+        background-color: #6b78b9;
+    }*/
+
+    .navLeft {
+        font-weight: bold;
+        font-family: "Montserrat",sans-serif !important;
+        background-color: #b6c7ce;
+        border: none;
+        border-radius: 3px;
+        float: left;
+        width: 100%;
+        margin-left: 2%;
+        background-image: linear-gradient(to right,#273491, #5089c8);
+        border-radius: 0px 40px 40px 40px;
+    }
+
+    .navRight, #btnValideStp1, #btnValideStp2 {
+        font-weight: bold;
+        font-family: "Montserrat",sans-serif !important;
+        background-color: #fb16ce;
+        border: none;
+        border-radius: 3px;
+        float: right;
+        width: 90%;
+        border-radius: 40px 0px 40px 40px;
+    }
+
+    input {
+        border-radius: 0px;
+    }
+
+    .backgrnd_MANAGERS {
+        background-image: url('../../img/backgrnd_managers.png');
+        background-position: bottom left;
+        background-size: cover;
+        background-position-y: 23px;
+        background-repeat: round;
+    }
+
+    .backgrnd_COLLABORATEURS {
+        background-image: url('../../img/backgrnd_collaborateurs.png') !important;
+        /*background-position: bottom right;*/
+        background-size: cover;
+        background-position-y: 0px;
+        background-repeat: round;
+    }
+
+    /*#btnValide {
+        background-color: #fb16ce;
+        border: none;
+        border-radius: 3px;
+        float: right;
+        width: 45%;
+        border-radius: 40px 0px 40px 40px;
+    }*/
+    .body-content {
+        padding-left: 0% !important;
+        padding-right: 0% !important;
+        padding-top: 5%;
+    }
+    /*__________ Window :___________*/
+
+    /*.listViewHeanding {
+        border-radius: 0px 40px 0px 0px;
+        background-image: linear-gradient(to right,#273491, #5089c8);
+    }*/
+
+    /*.listViewHeandingManage {
+        border-radius: 0px 40px 0px 0px;
+        background-color: #fb16ce !important;
+    }*/
+
+    .listViewBody {
+        padding: 15px;
+        padding-left: 5%;
+        padding-right: 35px !important;
+        border-radius: 0px 40px 40px 40px;
+        background-color: transparent;
+    }
+
+    #listViewResult {
+        border: none;
+        background-color: transparent;
+        width: 50%;
+    }
+
+    .btn:focus {
+        outline: none;
+    }
+
+    #contentMsg {
+        color: white;
+        width: 98%;
+        margin-left: 0%;
+        /* float: right; */
+        border-radius: 40px 40px 0px 40px;
+        background-image: linear-gradient(to right,#273491, #5089c8);
+        padding-left: 10%;
+        margin-bottom: 5%;
+    }
+
+    h5 {
+        font-family: "Montserrat",sans-serif !important;
+        font-weight: 600;
+    }
+
+    contentMsg > p, contentMsg > li {
+        font: 1rem 'Fira Sans', sans-serif;
+    }
+
+    #listViewResultCollaborateurs, #listViewResultManagers {
+        background-color: transparent;
+    }
+
+    #contentRsltManagers {
+        width: 50%;
+        /*background-image: linear-gradient(to right,#f916cd, #5089c8) !important;*/
+        border-radius: 0px 40px 0px 0px;
+        /*background-color: #fb16ce !important;*/
+    }
+
+    #contentRsltCollaborateurs {
+        width: 50%;
+        border-radius: 0px 40px 0px 0px;
+        /*background-color: #fb16ce !important;*/
+    }
+
+    .listViewHeandingManage {
+        border-radius: 0px 40px 0px 0px;
+        background-image: linear-gradient(to right,#f916cd, #5089c8);
+        padding-left: 5%;
+    }
+
+    .listViewHeandingCollabe {
+        border-radius: 0px 40px 0px 0px;
+        background-image: linear-gradient(to right,#273491, #5089c8);
+        padding-left: 5%;
+    }
+
+    #infoUserCollaborateur {
+        border-bottom: 1px solid #273491;
+        padding: 1%;
+    }
+
+    #infoUserManager {
+        border-bottom: 1px solid #f916cd;
+        padding: 1%;
+    }
+
+    #showLogin {
+        width: 25%;
+        /* background-color: #273491; */
+        margin-top: 3%;
+        border-radius: 0px 40px 40px 40px;
+        background-image: linear-gradient(to right,#273491, #5089c8);
+    }
+</style>
+
+@* Default Form : *@
+
+<div class="row">
+    <div id="defaultForm" style="float: right;">
+        <div id="contentMsg" class="row">
+            <h5>
+                Merci de mentionner le nombre de <span class="libelleManagerType">MANAGER</span> et le nombre de <span class="libelleCollabType">MANAGER</span>.
+            </h5>
+            <ul>
+                <li><h5 style="color:white;"><span style="color:#fb16ce"><span class="libelleManagerType">MANAGER</span></span> (Chargés d’alimenter les caisses)</h5></li>
+                <li><h5 style="color:white;"><span style="color:#fb16ce"><span class="libelleCollabType">MANAGER</span></span> (Responsables des dépenses)</h5></li>
+            </ul>
+        </div>
+        <div class="col-md-6 col-sm-6" style="display:inline-block; z-index:10;">
+            <div id="contentManag">
+                <div class="number-input">
+                    <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="left"></button>
+                    <div class="border_N" style="background-image: linear-gradient(to right,#273491, #5089c8);">
+                        <input class="quantity" min="@(User.IsInRole("Manager") ? "0" : "1")" id="nbManage" @*name="nbManag"*@ value="1" type="number" style="height: 190px;width: 190px; margin:5px;" oninput='format(this)' step="1">
+                    </div>
+                    <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus right"></button>
+                </div>
+                <div style="margin-top: 15px;">
+                    <label class="lbRole"><span class="libelleManagerType">MANAGER</span></label>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-6" style="z-index:10;">
+            <div id="contentCollab">
+                <div class="number-input">
+                    <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()" class="left"></button>
+                    <div class="border_N" style="background-image: linear-gradient(to right,#273491, #5089c8);">
+                        <input class="quantity" min="@(User.IsInRole("Manager") ? "0" : "1")" id="nbCollab" @*name="nbCollab"*@ value="1" type="number" style="height: 190px;width: 190px; margin:5px;">
+                    </div>
+                    <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus right"></button>
+                </div>
+                <div style="margin-top: 15px;">
+                    <label class="lbRole"><span class="libelleCollabType">MANAGER</span></label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" style="text-align:center;">
+                <button class="btn btn-primary" id="btnSuivantStep1">SUIVANT</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<div class="modal fade" id="ModalSaisi" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:red;">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Exception ( ! )</h4>
+                </div>
+                <div class="modal-body">
+                    <p id="contentText"></p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal fade" id="ModalEmail" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:red;">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Exception ( ! )</h4>
+                </div>
+                <div class="modal-body">
+                    <p id="contentText"></p>
+                </div>
+            </div>
+
+        </div>
+    </div>*@
+
+@* Content Views : *@
+
+<div id="contentAll">
+    <div class="row">
+        <div id="contentManagers" class="col-md-6 col-sm-6" style="float: right;">
+            <div class="panel panel-primary" style="margin: 0%;">
+                <div class="panel-heading headManag">
+                    <h2 id="titleM"><span class="libelleManagerType">MANAGER</span> : 1</h2>
+                </div>
+                <div class="panel-body" style="position:relative;">
+                    <div id="listViewManage"></div>
+                    <div id="dvNav">
+                        <div class="col-md-6 col-sm-6">
+                            <button class="btn btn-primary navLeft" id="btnprécedentMANAG">PRÉCÉDENT</button>
+                        </div>
+                        <div class="col-md-6 col-sm-6" style="padding-right: 0px;">
+                            <button class="btn btn-primary navRight" id="btnpoursuivreMANAG">POURSUIVRE</button>
+                            @*<button class="btn btn-primary" style="display:none;" id="btnValideStp1">VALIDER</button>*@
+                        </div>
+                    </div>
+                    @*<div id="pagerManage" class="k-pager-wrap" style="background-color: transparent; border: none;"></div>*@
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="row">
+        <div id="contentCollabs" style="display:none; float:left;" class="col-md-6 col-sm-6">
+            <div class="panel panel-primary" style="margin: 0%;">
+                <div class="panel-heading headCollab">
+                    <h2 id="titleC"><span class="libelleCollabType">COLLABORATEUR</span> : 1</h2>
+                </div>
+                <div class="panel-body">
+                    <div id="listViewCollab"></div>
+                    <div id="dvNav">
+                        <div class="col-md-6 col-sm-6">
+                            <button class="btn btn-primary navLeft" id="btnprécedentCOLLAB">PRÉCÉDENT</button>
+                        </div>
+                        <div class="col-md-6 col-sm-6" id="contentBtnValide" style="padding-right: 0px;">
+                            <button class="btn btn-primary navRight" id="btnpoursuivreCOLLAB">POURSUIVRE</button>
+                            <button class="btn btn-primary" style="display:none;" id="btnValideStp2">VALIDER</button>
+                        </div>
+                    </div>
+                    @*<div id="pagerCollab" class="k-pager-wrap" style="background-color: transparent; border: none;"></div>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Content Result : *@
+
+@*<div id="contentResult" style="display:none;">
+        <label class="lbRole"> LES NOUVEAUX UTILISATEURS : </label>
+        <div class="User">
+            <div class="panel-primary" style="margin:0%;">
+                # if(data.role == "manager"){ $(".panel-heading").removeClass("listViewHeanding").addClass("listViewHeandingManage"); console.log("manage"); }else{console.log("collaborateur"); }#
+                <div class="panel-heading listViewHeanding" style="padding-left: 5%;">
+                    <label> #:role# </label>
+                </div>
+                <div class="panel-body listViewBody">
+                    <div id="listViewResult"></div>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+<div id="contentAllResult" style="display:none;">
+
+    <label class="lbRole"> LES NOUVEAUX UTILISATEURS : </label>
+
+    <div id="contentRsltManagers" style="margin-bottom: 1%;">
+        <div class="panel-primary" style="margin:0%;">
+            @*# if(data.role == "manager"){ $(".panel-heading").removeClass("listViewHeanding").addClass("listViewHeandingManage"); console.log("manage"); }else{console.log("collaborateur"); }#*@
+            <div class="panel-heading listViewHeandingManage">
+                <label> <span class="libelleManagerType">MANAGER</span> :</label>
+            </div>
+            <div class="panel-body listViewBody">
+                <div id="listViewResultManagers"></div>
+            </div>
+        </div>
+    </div>
+    <div id="contentRsltCollaborateurs">
+        <div class="panel-primary" style="margin:0%;">
+            @*# if(data.role == "manager"){ $(".panel-heading").removeClass("listViewHeanding").addClass("listViewHeandingManage"); console.log("manage"); }else{console.log("collaborateur"); }#*@
+            <div class="panel-heading listViewHeandingCollabe">
+                <label> <span class="libelleCollabType">COLLABORATEUR</span> :</label>
+            </div>
+            <div class="panel-body listViewBody">
+                <div id="listViewResultCollaborateurs"></div>
+            </div>
+        </div>
+    </div>
+    <div style="text-align:center;width:50%;">
+        <button class="btn btn-primary" id="showLogin" onclick="window.location.href = window.location.origin + '/Account/Login';"> Se Connecter  </button>
+    </div>
+
+</div>
+@* Template Result : *@
+
+<script id="tmpResultManagers" type="text/x-kendo-template">
+    <div id="infoUserManager">
+        <div><label>UserName : </label> #:email#</div>
+        <div><label>Password : </label> #:password#</div>
+    </div>
+
+</script>
+<script id="tmpResultCollaborateurs" type="text/x-kendo-template">
+    <div id="infoUserCollaborateur">
+        <div><label>Login : </label> #:email#</div>
+        <div><label>Password : </label> #:password#</div>
+    </div>
+</script>
+
+@* Template Mangers : *@
+
+<script id="tmpManage" type="text/x-kendo-template">
+    <div class="rows">
+        <input id="nameManag" class="inputTxt" placeholder="NOM COMPLET" value="#:name#" onchange="changeFieldManage('#:uid#', 'name', this)" />
+    </div>
+    <div class="rowsDrop">
+        <input id="civiliteManag" value="#:civilite#" onchange="changeFieldManage('#:uid#', 'civilite', this)" style="margin:0; width: 100%;" />
+    </div>
+    <div class="rows">
+        <input id="emailManag" class="inputTxt" placeholder="EMAIL" value="#:email#" type="email" onchange="changeFieldManage('#:uid#', 'email', this)" />
+    </div>
+    <div class="rows">
+        <input id="telManag" class="inputTxt" placeholder="TELEPHONE" value="#:tel#" onkeyup="if(/[^0-9]+/.test(this.value)) this.value = '';" maxlength="10" onchange="changeFieldManage('#:uid#', 'tel', this)" />
+    </div>
+    <div class="rows">
+        <input class="inputTxt" placeholder="MOT DE PASSE : 123456" @*value="#:password#"*@ disabled />
+    </div>
+    <div class="rows" style="text-align: left;">
+        <label class="labelPssw">Vous pouvez modifier le mot de passe de votre compte à tout moment.</label>
+    </div>
+</script>
+
+@* Template Collaborateurs : *@
+
+<script id="tmpCollab" type="text/x-kendo-template">
+    <div class="rows">
+        <input id="nameCollab" class="inputTxt" value="#:name#" placeholder="NOM COMPLET" onchange="changeFieldCollab('#:uid#', 'name', this)" />
+    </div>
+    <div class="rowsDrop">
+        <input id="civiliteCollab" value="#:civilite#" onchange="changeFieldCollab('#:uid#', 'civilite', this)" style="margin:0px !important; width: 100%;" />
+    </div>
+    <div class="rows">
+        <input id="emailCollab" value="#:email#" placeholder="EMAIL" onchange="changeFieldCollab('#:uid#', 'email', this)" class="inputTxt" />
+    </div>
+    <div class="rows">
+        <input id="telCollab" value="#:tel#" placeholder="TELEPHONE" class="inputTxt" onkeyup="if (/[^0-9]+/.test(this.value)) this.value = '';" onchange="changeFieldCollab('#:uid#', 'tel' , this)" maxlength="10" />
+    </div>
+    <div class="rows">
+        <input class="inputTxt" placeholder="MOT DE PASSE : 123456" @*value="#:password#"*@ disabled />
+    </div>
+    <div class="rows" style="text-align: left;">
+        <label class="labelPssw">Vous pouvez modifier le mot de passe de votre compte à tout moment.</label>
+    </div>
+</script>
+
+<script>
+
+    var libelleManagerType = typeAbonne == "1" ? "MANAGER" : "CHEF DE FAMILLE";
+    var libelleCollabType = typeAbonne == "1" ? "COLLABORATEUR" : " RESPONSABLE DES COURSES";
+
+    $(".libelleManagerType").text(libelleManagerType);
+    $(".libelleCollabType").text(libelleCollabType);
+
+    //function format(input) {
+    //    if (input.value.length === 1) {
+    //        input.value = "0" + input.value;
+    //    }
+    //}
+
+    var nNbCollab, nbManage;
+    //var mails = [];
+
+    var dataSourceCollab = new kendo.data.DataSource({
+        pageSize: 1,
+        schema: {
+            model: {
+                id: "uid",
+                fields: {
+                    id: { type: "string" },
+                    name: { type: "string" },
+                    civilite: { type: "number", defaultValue: 1 },
+                    email: { type: "string" },
+                    password: { type: "string" },
+                    tel: { type: "string" },
+                    role: { type: "string" }
+                }
+            }
+        }
+    });
+
+    var dataSourceManag = new kendo.data.DataSource({
+        pageSize: 1,
+        schema: {
+            model: {
+                id: "id",
+                fields: {
+                    id: { type: "string" },
+                    name: { type: "string" },
+                    civilite: { type: "number", defaultValue: 1 },
+                    email: { type: "string" },
+                    password: { type: "string" },
+                    tel: { type: "string" },
+                    role: { type: "string" }
+                }
+            }
+        }
+    });
+
+    var dataCollab = [], dataManag = [];
+
+    //___ for how background collaborateurs :
+
+    function showBackgroundCollaborateurs() {
+
+        $(".container").removeClass("backgrnd_MANAGERS").addClass("backgrnd_COLLABORATEURS");
+        $(".container .head-content").removeClass("backgrnd_COLLABORATEURS");
+        $(".container .body-content").removeClass("backgrnd_COLLABORATEURS");
+    }
+    //___ for how background managers :
+
+    function showBackgroundManagers() {
+
+        $(".container").removeClass("contentAll").addClass("backgrnd_MANAGERS");
+        $(".container .head-content").removeClass("backgrnd_MANAGERS");
+        $(".container .body-content").removeClass("backgrnd_MANAGERS");
+    }
+
+    function hideFirstForm() {
+
+        $("#contentMsg").hide();
+        $("#defaultForm").hide();
+        $("#contentAll").show();;
+    }
+
+    $("#btnSuivantStep1").click(function () {
+
+        nbCollab = $("#nbCollab").val();
+        nbManage = $("#nbManage").val();
+
+        if (nbCollab != 0 || nbManage != 0) {
+
+            if (nbManage == 0) {
+
+                hideFirstForm();
+
+                $("#contentManagers").hide();
+                $("#contentCollabs").show();
+
+                showBackgroundCollaborateurs();
+
+            } else {
+                hideFirstForm();
+                showBackgroundManagers();
+            }
+
+            var nbm = nbManage;
+            var nbc = nbCollab;
+
+            for (i = 0; i < nbm; i++) {
+                dataManag.push({ name: "", email: "", civilite: 0, tel: "", password: "123456", role: "manager" }); //add item
+            }
+
+            for (j = 0; j < nbc; j++) {
+                dataCollab.push({ name: "", email: "", civilite: 0, tel: "", password: "123456", role: "collaborateur" }); //add item
+            }
+
+            dataSourceManag.data(dataManag);
+            dataSourceCollab.data(dataCollab);
+        } else
+            notificationNoHide.show({ title: "", message: "( ! ) s'il vous plaît entrer le nombre des utilisateurs ou moins dans une zone de texte " }, "error");
+    });
+
+    var firstbound = true;
+
+    //___ managers :
+
+    var x = 1;
+
+    $("#btnprécedentMANAG").click(function () {
+        if (x > 1) {
+            x--;
+            dataSourceManag.page(x);
+            $("#titleM").text(libelleManagerType + " : " + x);
+        }
+    });
+
+    function borderChampsError(data, type) {
+        if (data.name.trim() == "")
+            $("#name" + type).addClass('border-error');
+        else
+            $("#name" + type).removeClass('border-error');
+
+        if (data.email.trim() == "")
+            $("#email" + type).addClass('border-error');
+        else {
+            validateEmail(data.email, function (res) {
+                if (res) {
+                    mailExisted(data.email, data.uid, function (resExist) {
+                        if (!resExist) {
+                            $("#email" + type).removeClass('border-error');
+                        } else {
+                            notification.show({ title: "", message: "adresse mail existe déjà" }, "error");
+                            $("#email" + type).addClass('border-error');
+                        }
+                    });
+                } else {
+                    hideLoad();
+                    $("#email" + type).addClass('border-error');
+                    notification.show({ title: "", message: " Email incorrect" }, "error");
+                }
+            });
+        }
+
+        if (data.civilite == 0)
+            $("#civilite" + type).parent().addClass('border-error');
+        else
+            $("#civilite" + type).parent().removeClass('border-error');
+
+        if (data.tel.trim() == "")
+            $("#tel" + type).addClass('border-error');
+        else
+            $("#tel" + type).removeClass('border-error');
+    }
+
+    $("#btnpoursuivreMANAG").click(function () {
+        showLoad();
+        dataManag = dataSourceManag.data();
+
+        if (dataManag[x - 1].name == "" || dataManag[x - 1].civilite == "" || dataManag[x - 1].tel == "" || dataManag[x - 1].email == "" || dataManag[x - 1].civilite == "") {
+            hideLoad();
+            borderChampsError(dataManag[x - 1], "Manag");
+            $("#emailManag").addClass('border-error');
+            notification.show({ title: "", message: "champs vide" }, "error");
+            return;
+        }
+
+        var filled = true;
+        firstbound = false;
+
+        var di = dataManag[x - 1];
+
+        validateEmail(di.email, function (res) {
+            if (res) {
+                mailExisted(di.email, di.uid, function (resExist) {
+                    console.log(resExist);
+                    if (!resExist) {
+                        if (x == dataSourceManag.totalPages()) {
+                            showBackgroundCollaborateurs();
+                            $("#contentManagers").hide();
+                            $("#contentCollabs").show();
+                            if (dataSourceCollab.totalPages() == 1) {
+                                $("#btnValideStp2").show();
+                                $("#btnpoursuivreCOLLAB").hide();
+                            }
+                        } else {
+                            x++;
+                            dataSourceManag.page(x);
+                            $("#titleM").text(libelleManagerType + " : " + x);
+                        }
+                    } else {
+                        notification.show({ title: "", message: "adresse mail existe déjà" }, "error");
+                        $("#emailManag").addClass('border-error');
+                    }
+                    hideLoad();
+                });
+            } else {
+                hideLoad();
+                notification.show({ title: "", message: " Email incorrect" }, "error");
+            }
+        });
+    });
+
+    //$("#btnpoursuivreMANAG").click(function () {
+
+    //    x = dataSourceManag.page();
+    //    dataManag = dataSourceManag.data().toJSON();
+
+    //    //___
+    //    if (dsMails.totalPages() < 1) {
+    //        dsMails.add(dataSourceManag.data().at(x - 1));
+    //    } else {
+    //        var existed = false;
+    //        for (var i = 0 ; i < dsMails.totalPages() ; i++) {
+    //            if (dsMails.data().at(i).uid == dataSourceManag.data().at(x - 1).uid) { existed = true; }
+    //        }
+    //        if (!existed) { dsMails.add(dataSourceManag.data().at(x - 1)); }
+    //    }
+    //    //___
+
+    //    var filled = true;
+    //    firstbound = false;
+
+    //    //mails.push(dataManag[x - 1].email);
+
+    //    if (dataManag[x - 1].name == "" || dataManag[x - 1].civilite == "" || dataManag[x - 1].tel == "" || dataManag[x - 1].email == "" || dataManag[x - 1].civilite == "") {
+    //        notificationNoHide.show({ title: "", message: "champ vide" }, "error");
+    //        //tousRempli = false;
+    //        filled = false;
+    //        $("#emailM").css('border-color', 'red');
+    //        setTimeout(function () {
+    //            // wait for 3s
+    //        }, 3000);
+
+    //    } else {
+    //        if (!validateEmail(dataManag[x - 1].email)) {
+
+    //            notificationNoHide.show({ title: "", message: "Email est incorrect" }, "error");
+    //            filled = false;
+    //            //___ Clear Email:
+    //            var uid = dataSourceManag.data().at(x - 1).uid;
+    //            var itemM = dataSourceManag.getByUid(uid);
+    //            itemM["email"] = "";
+    //            $("#emailM").css('border-color', 'red');
+    //            //dataSourceManag.sync()
+
+    //        } else if (mailExisted(dataManag[x - 1].email)) {
+    //            $("#emailM").css('border-color', 'red');
+    //            notificationNoHide.show({ title: "", message: "adresse mail existe déjà" }, "error");
+    //            filled = false;
+    //        }
+    //    }
+    //    //dataSourceManag.sync()
+    //    if (filled) {
+    //        x++;
+
+    //        if (x > dataSourceManag.totalPages() && nbCollab > 0) {
+
+    //            showBackgroundCollaborateurs();
+
+    //            $("#contentManagers").hide();
+    //            $("#contentCollabs").show();
+    //            if (nbCollab == 1) { $("#btnValideStp2").show(); }
+
+    //        } else if (nbCollab == 0 && x > dataSourceManag.totalPages()) {
+    //            $("#btnValideStp1").show();
+    //        }
+    //        else { dataSourceManag.page(x); $("#titleM").text("MANAGER : " + x); }
+    //    }
+    //});
+
+    //___ collaborateurs :
+
+    var y = 1;
+
+    $("#btnprécedentCOLLAB").click(function () {
+        $("#btnValideStp2").hide();
+        $("#btnpoursuivreCOLLAB").show();
+        $("#contentBtnValide").css("display", "block");
+        y = dataSourceCollab.page();
+        if (y == 1) {
+            showBackgroundManagers();
+            $("#contentCollabs").hide();
+            $("#contentManagers").show();
+        }
+        else {
+            y--;
+            dataSourceCollab.page(y);
+            $("#titleC").text(libelleCollabType + " : " + y);
+        }
+    });
+    //______________________________________________________________________________________
+
+    $("#btnpoursuivreCOLLAB").click(function () {
+        debugger;
+        showLoad();
+        dataCollab = dataSourceCollab.data();
+
+        if (dataCollab[y - 1].name == "" || dataCollab[y - 1].civilite == "" || dataCollab[y - 1].tel == "" || dataCollab[y - 1].email == "" || dataCollab[y - 1].civilite == "") {
+            hideLoad();
+            notification.show({ title: "", message: "champs vide" }, "error");
+            return;
+        }
+
+        var filled = true;
+        firstbound = false;
+
+        y = dataSourceCollab.page();
+
+        var di = dataCollab[y - 1];
+
+        validateEmail(di.email, function (res) {
+            if (res) {
+                mailExisted(di.email, di.uid, function (resExist) {
+                    console.log(resExist);
+                    if (!resExist) {
+                        y++;
+                        dataSourceCollab.page(y);
+                        $("#titleC").text(libelleCollabType + " : " + y);
+                        if (y == dataSourceCollab.totalPages()) {
+                            $("#btnValideStp2").show();
+                            $("#btnpoursuivreCOLLAB").hide();
+                        }
+                    } else {
+                        notification.show({ title: "", message: "adresse mail existe déjà" }, "error");
+                        $("#emailC").css('border-color', 'red');
+                    }
+                    hideLoad();
+                });
+            } else {
+                hideLoad();
+                notification.show({ title: "", message: " Email incorrect" }, "error");
+            }
+        });
+    });
+
+    //___ if email existed :
+
+    function verifMail(email, callBack) {
+        $.ajax({
+            url: URLROOT + "User/ExistMail",
+            type: "POST",
+            data: {
+                email: email
+            },
+            success: function (data) {
+                callBack(data);
+            }
+        })
+    }
+
+    var count = 0;
+
+    function mailExisted(email, uid, callBack) {
+        var existMail = $.grep(dataSourceCollab.data(), function (e) { return e.email == email && e.uid != uid; }).length > 0;
+        if (existMail) {
+            callBack(true);
+            return;
+        }
+        existMail = $.grep(dataSourceManag.data(), function (e) { return e.email == email && e.uid != uid; }).length > 0;
+        if (existMail) {
+            callBack(true);
+            return;
+        }
+        verifMail(email, callBack);
+    }
+
+    // btn up down  :
+
+    $("btnchange").toggle();
+
+    $("#btnchange").click(function () {
+        $("#contentManagers").toggle();
+        $("#contentCollabs").toggle();
+    });
+
+    jQuery('<div class="quantity-nav"><div class="quantity-button quantity-up">+</div><div class="quantity-button quantity-down">-</div></div>').insertAfter('.quantity input');
+
+    jQuery('.quantity').each(function () {
+        var spinner = jQuery(this),
+            input = spinner.find('input[type="number"]'),
+            btnUp = spinner.find('.quantity-up'),
+            btnDown = spinner.find('.quantity-down'),
+            min = input.attr('min'),
+            max = input.attr('max');
+
+        btnUp.click(function () {
+            var oldValue = parseFloat(input.val());
+            if (oldValue >= max) {
+                var newVal = oldValue;
+            } else {
+                var newVal = oldValue + 1;
+            }
+            spinner.find("input").val(newVal);
+            spinner.find("input").trigger("change");
+        });
+
+        btnDown.click(function () {
+            var oldValue = parseFloat(input.val());
+            if (oldValue <= min) {
+                var newVal = oldValue;
+            } else {
+                var newVal = oldValue - 1;
+            }
+            spinner.find("input").val(newVal);
+            spinner.find("input").trigger("change");
+        });
+    });
+
+    function changeFieldCollab(uid, field, ele) {
+        var di = dataSourceCollab.getByUid(uid);
+        di[field] = $(ele).val();
+        borderChampsError(di, "Collab");
+    }
+
+    function changeFieldManage(uid, field, ele) {
+        var di = dataSourceManag.getByUid(uid);
+        di[field] = $(ele).val();
+        console.log(di);
+        borderChampsError(di, "Manag");
+    }
+
+    //var dslogins = new kendo.data.datasource({
+    //});
+
+    //var dsMails = new kendo.data.DataSource({
+    //});
+
+    //var dataSourceCollab = new kendo.data.DataSource({
+    //    pageSize: 1,
+    //    schema: {
+    //        model: {
+    //            id: "uid",
+    //            fields: {
+    //                id: { type: "string" },
+    //                name: { type: "string" },
+    //                civilite: { type: "number", defaultValue: 1 },
+    //                email: { type: "string" },
+    //                password: { type: "string" },
+    //                tel: { type: "string" },
+    //                roel: { type: "string" }
+    //            }
+    //        }
+    //    }
+    //});
+
+    //var dataSourceManag = new kendo.data.DataSource({
+    //    pageSize: 1,
+    //    schema: {
+    //        model: {
+    //            id: "id",
+    //            fields: {
+    //                id: { type: "string" },
+    //                name: { type: "string" },
+    //                civilite: { type: "number", defaultValue: 1 },
+    //                email: { type: "string" },
+    //                password: { type: "string" },
+    //                tel: { type: "string" },
+    //                roel: { type: "string" }
+    //            }
+    //        }
+    //    }
+    //});
+    //_______________________ pager manag :
+
+    //var index = 1;
+    //var pagerManage = $("#pagerManage").kendoPager({
+    //    dataSource: dataSourceManag,
+    //    change: function (e) {
+    //        //$("btnchange").hide();
+    //        var x = e.index;
+    //        index = e.index;
+    //        if (index == dataSourceManag.totalPages()) {
+    //            $("#titleM").text("MANAGER :" + index);
+    //            //$("btnchange").show();
+    //            // do samething
+    //        }
+    //        $("#titleM").text("MANAGER : " + index);
+    //    },
+    //    //dataBound: function (e) {
+    //    //    console.log("bound");
+    //    //    setTimeout(function () {
+    //    //        e.sender.wrapper.find('.k-pager-wrap .k-widget .k-floatwrap .k-pager-sm > a.k-link .k-pager-nav').removeClass('k-state-disabled');
+    //    //    });
+    //    //}
+    //});
+
+    //pagerManage.find(".k-pager-nav").eq(1)
+    //           .find("span").text("PRÉCÉDENT")
+    //           .removeClass("k-icon")
+    //           .parent().addClass("btnLast");
+
+    //pagerManage.find(".k-pager-nav").eq(3)
+    //          .find("span").text("POUSUIVRE")
+    //          .removeClass("k-icon")
+    //          .parent().addClass("btnNext");
+    //pagerManage.find(".k-pager-wrap .k-widget")
+    //             .find("ul").removeClass(".k-pager-numbers");
+    ////___________________________ pager collab :
+
+    //var pagerCollab = $("#pagerCollab").kendoPager({
+    //    dataSource: dataSourceCollab,
+    //    change: function (e) {
+    //        var index = e.index;
+    //        $("#titleC").text("COLLABORATEUR : " + index);
+    //    },
+    //    //dataBound: function (e) {
+    //    //    console.log("bound");
+    //    //    setTimeout(function () {
+    //    //        e.sender.wrapper.find('.k-pager-wrap .k-widget .k-floatwrap .k-pager-sm > a').removeClass('k-state-disabled');
+    //    //    });
+    //    //}
+    //});
+
+    //pagerCollab.find(".k-pager-nav").eq(1)
+    //            .find("span").text("PRÉCÉDENT")
+    //            .removeClass("k-icon")
+    //            .parent().addClass("btnLast");
+
+    //pagerCollab.find(".k-pager-nav").eq(3)
+    //           .find("span").text("POUSUIVRE")
+    //           .removeClass("k-icon")
+    //           .parent().addClass("btnNext");
+
+    //pagerCollab.find(".k-pager-wrap .k-widget >a").removeClass("disabled");
+
+    //____________ ListView :
+
+    var lvManag = $("#listViewManage").kendoListView({
+        dataSource: dataSourceManag,
+        template: kendo.template($("#tmpManage").html()),
+        dataBound: function (e) {
+            //setTimeout(function () {
+            //    e.sender.wrapper.find('.k-pager-wrap.k-pager-sm > a').removeClass('k-state-disabled');
+            //    //$("#titleM").text("Manger :" + index);
+            //});
+            //if (index == dataSourceManag.totalPages() - 1) {
+            //    console.log("=");
+            //    $("btnchange").toggle();
+            //    //$("btnchange").attr("display","block");
+            //    // do samething
+            //}
+            index = 0;
+            $("#civiliteManag").kendoDropDownList({
+                dataSource: DsCivilite,
+                dataTextField: "lb",
+                dataValueField: "id",
+                optionLabel: "Civilité",
+                change: function () {
+                    borderChampsError(dataSourceManag.at(x - 1), "Manag");
+                }
+            }).data("kendoDropDownList");
+
+            //if ($("#emailM").val() == "" && !firstbound)
+            //    $("#emailM").css('border-color', 'red');
+            //else
+            //    $("#emailM").css('border-color', '#bfbfbf');
+        }
+    });
+
+    var lvCollab = $("#listViewCollab").kendoListView({
+        dataSource: dataSourceCollab,
+        template: kendo.template($("#tmpCollab").html()),
+        dataBound: function () {
+            //pagerCollab.each(function (e) {
+            //    console.log("bound");
+            //    e.sender.wrapper.find('.k-pager-wrap .k-widget .k-floatwrap .k-pager-sm > a.k-link .k-pager-nav').removeClass('k-state-disabled');
+            //});
+
+            $("#civiliteCollab").kendoDropDownList({
+                dataSource: DsCivilite,
+                dataTextField: "lb",
+                dataValueField: "id",
+                optionLabel: "Civilité",
+                change: function () {
+                    borderChampsError(dataSourceCollab.at(y - 1), "Collab");
+                }
+            }).data("kendoDropDownList");
+
+            //if ($("#emailC").val() == "" && !firstbound) {
+            //    $("#emailC").css('border-color', 'red');
+            //}
+            //else {
+            //    $("#emailC").css('border-color', '#bfbfbf');
+            //}
+        }
+    });
+    //________________________ managers:
+
+    $("#listViewResultManagers").kendoListView({
+        dataSource: dataSourceManag,
+        template: kendo.template($("#tmpResultManagers").html())
+    });
+    //________________________ collaborateurs:
+
+    $("#listViewResultCollaborateurs").kendoListView({
+        dataSource: dataSourceCollab,
+        template: kendo.template($("#tmpResultCollaborateurs").html())
+    });
+    //____________________________________________________
+    function OnSelectAbonne() {
+        return {
+            idAbonne: selectedAbonne
+        }
+    }
+
+    var drpCivilite = $("#civilite").kendoDropDownList({
+        dataSource: DsCivilite,
+        dataTextField: "lb",
+        dataValueField: "id",
+        optionLabel: "Civilité"
+
+    }).data("kendoDropDownList");
+
+    //var nb = 0;
+
+    //try {
+    //    nb = parseInt($("#TxtNbr_enfants").val());
+    //} catch (e) {
+
+    //}
+
+    //var date = new Date(); // Date.Now()
+    //var i = 0;
+    //var shortD = date.toLocaleDateString(); //convert to  : dd/MM/yyyy
+    //if (nb > DsNbEnfants.data().length) {
+    //    i = DsNbEnfants.data().length;
+    //    for (i; i < nb ; i++) {
+    //        DsNbEnfants.add({ nom: "", sexe: 1, date: shortD }); //add item
+    //    }
+    //}
+
+
+    //var conteur = 0;
+
+    //var nbCollab = 0;
+    //var nbManage = 0;
+    //var Role = "Admin";
+    //var typeR = "Manager";
+    //var length = 0;
+
+    //$("#NextView").click(function () {
+    //    $("#contentCollabs").toggle();
+    //    $("#contentManagers").toggle();
+    //});
+    //$("#formInscri").kendoValidator({
+    //    rules: {
+    //        customRule1: function (input) {
+    //            // all of the input must have a value
+    //            return $.trim(input.val()) !== "";
+    //        },
+    //        customRule2: function (input) {
+    //            //only 'Tom' will be valid value for the username input
+    //            if (input.is("[name=name]")) {
+    //                return input.val() === "Tom";
+    //            }
+    //            return true;
+    //        }
+    //    },
+    //    messages: {
+    //        customRule1: "All fields are required",
+    //        customRule2: "Your UserName must be Tom"
+    //    }
+    //});
+
+    function validateEmail(email, callBack) {
+        var re = /^(([^<>()[\]\\.,;:\s@@\"]+(\.[^<>()[\]\\.,;:\s@@\"]+)*)|(\".+\"))@@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        callBack(re.test(email));
+    }
+
+    $("#bonjour-anonyme").text("Bonjour " + organisation + "!");
+
+    function Valider() {
+        dataCollab = dataSourceCollab.data();
+        dataManag = dataSourceManag.data();
+
+        var di = dataCollab[dataSourceCollab.totalPages() - 1];
+        if (di.name == "" || di.civilite == "" || di.tel == "" || di.email == "" || di.civilite == "") {
+            hideLoad();
+            borderChampsError(di, "Collab");
+            notification.show({ title: "", message: "champs vide" }, "error");
+            return;
+        }
+        validateEmail(di.email, function (res) {
+            if (res) {
+                mailExisted(di.email, di.uid, function (resExist) {
+                    if (!resExist) {
+                        var data = [];
+                        $.merge(data, dataCollab);
+                        $.merge(data, dataManag);
+                        var abonne = organisation;
+                        showLoad();
+                        $.ajax({
+                            contentType: 'application/json; charset=utf-8',
+                            type: "POST",
+                            url: URLROOT + "User/Inscription",
+                            data: JSON.stringify({ users: data, abonne: abonne, mailAbonne: mailAbonne, typeAbonne: typeAbonne, update: isManager }),
+                            traditional: true,
+                            success: function (Res) {
+                                hideLoad();
+                                if (Res.success) {
+                                    dataSourceCollab.pageSize(dataSourceCollab.data().length);
+                                    dataSourceManag.pageSize(dataSourceManag.data().length);
+                                    $("#contentAll").toggle();
+                                    $("#contentAllResult").toggle();
+                                    localStorage.removeItem("organisation");
+                                    localStorage.removeItem("email");
+                                }
+                                notificationNoHide.show({ title: "", message: Res.message }, Res.success ? "success" : "error");
+                            },
+                            error: function (xhr) {
+                                hideLoad();
+                                alert('Error: ' + xhr.statusText);
+                            },
+                        });
+                    } else {
+                        notification.show({ title: "", message: "adresse mail existe déjà" }, "error");
+                        $("#emailC").css('border-color', 'red');
+                    }
+                });
+            } else {
+                notification.show({ title: "", message: " Email incorrect" }, "error");
+            }
+        });
+
+    }
+
+    //$("#btnValideStp1").click(function () {
+    //    $("#contentRsltCollaborateurs").hide();
+    //    Valider();
+    //    showBackgroundCollaborateurs();
+    //});
+
+    $("#btnValideStp2").click(function () {
+        Valider();
+    });
+
+    //if (isManager) {
+    //$(document).ready(function () {
+    //    $("#nbManage").val(0);
+    //    $("#btnSuivantStep1").click();
+    //    $("#btnprécedentCOLLAB").hide();
+    //    $("#btnpoursuivreCOLLAB").hide();
+    //    $("#btnValideStp2").show();
+    //});
+</script>

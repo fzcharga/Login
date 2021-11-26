@@ -1,0 +1,90 @@
+﻿
+@{
+    ViewBag.Title = "Gestion";
+}
+<style>
+    .my-check {
+        color: green;
+    }
+
+    .employe-photo {
+        display: inline-block;
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background-size: 100% 100%;
+        background-position: center center;
+        vertical-align: middle;
+        line-height: 32px;
+        box-shadow: inset 0 0 1px #999, inset 0 0 10px rgba(0,0,0,.2);
+        margin-left: 5px;
+    }
+
+    .img-app {
+        width: 80px;
+        min-height: 80px;
+        /*border: 1px solid #aaa;*/
+        background-size: 100%;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+</style>
+<h2>Gestion</h2>
+<div id="gridApplications"></div>
+
+<div style="display: none;">
+    <input id="file" name="file" type="file" accept="image/png" />
+</div>
+
+<script>
+
+    var selectedApplicationId = null;
+    var selectedTypeImage = null;
+
+    var file = $("#file").kendoUpload({
+        async: {
+            saveUrl: URLROOT + "Applications/SaveImage",
+            autoUpload: true,
+        },
+        upload: function (e) {
+            e.data = { id: selectedApplicationId, type: selectedTypeImage };
+        },
+        success: function () {
+            $("#" + selectedTypeImage + "-" + selectedApplicationId).attr("style", "background-image: url(/images/Applications/" + selectedTypeImage + "-" + selectedApplicationId + ".png?v=" + new Date().getTime() + ");");
+        }
+    }).data("kendoUpload");
+
+    function editorMultiline(container, options) {
+        var textarea = $("<textarea name='" + options.field + "' row='3' style='width: 100%;'></textarea>");
+        textarea.appendTo(container);
+    }
+
+    var gridApplications = $("#gridApplications").kendoGrid({
+        toolbar: ["create", "save", "cancel"],
+        dataSource: DsApplications,
+        columns: [
+            { field: "name", title: "Application", width: 150 },
+            { field: "url", title: "Lien" },
+            { field: "desc", title: "Description", editor: editorMultiline },
+            { field: "notUseLogin", title: "Necessite login", template: "#if(notUseLogin) {# <i class='fa fa-check my-check'></i> #}#", width: 150 },
+            { title: "Logo", template: "#if(id != 0){# <div class='img-app img-responsive' id='logo-#:id#' onClick='loadImage(#:id#, \"logo\")' style='background-image: url(" + "@Url.Content("~/")" + "images/Applications/logo-#:id#.png?v=" + @(DateTime.Now.Ticks) + "), url(" + "@Url.Content("~/")" + "images/Applications/logo.png);'></div> #}#" },
+            { title: "Arrière plan", template: "#if(id != 0){# <div class='img-app img-responsive' id='back-#:id#' onClick='loadImage(#:id#, \"back\")' style='background-image: url(" + "@Url.Content("~/")" + "images/Applications/back-#:id#.png?v=" + @(DateTime.Now.Ticks) + "), url(" + "@Url.Content("~/")" + "images/Applications/back.png);'></div> #}#" },
+
+            //{ command: "destroy", title: "&nbsp;", width: 150 },
+        ],
+        editable: "incell"
+    }).data("kendoGrid");
+
+
+    function loadImage(id, type) {
+        selectedApplicationId = id;
+        selectedTypeImage = type;
+        $("#file").click();
+        //var url = "Applications/save?idApp=" + id;
+        //createWndG("uploadWnd", url, "Importez image", 400, id);
+
+        //var wnd = $("#uploadWnd").data("kendoWindow");
+        //wnd.open().center();
+        //$("#uploadWnd").find("[type=file]").click();
+    }
+</script>

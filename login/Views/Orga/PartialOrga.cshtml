@@ -1,0 +1,228 @@
+﻿@model int?
+
+    <div id="diagram" style=" width: 100%;height:93%" ></div>
+<div class="box wide" style="margin:10px;">
+    Affichage: <select id="subtype">
+    <option value="tipover">Non Structuré</option>
+        <option value="down">Structuré</option>
+        
+    </select>
+    <div style="float:right;">
+        <input id="diagramZoom" />
+        <input type="text" id="diagramZoomIndicator" class="k-textbox" value="100" style="width: 40px; vertical-align: middle; top: -10px;" />
+    </div>
+    
+</div>
+        <script>
+
+    function visualTemplate(options) {
+        var dataviz = kendo.dataviz;
+        var g = new dataviz.diagram.Group();
+        var dataItem = options.dataItem;
+
+        if (dataItem.sup === null) {
+            g.append(new dataviz.diagram.Circle({
+                radius: 60,
+                stroke: {
+                    width: 2,
+                    color: "#586477"
+                },
+                fill: "#e8eff7"
+            }));
+            g.append(new dataviz.diagram.Image({
+                source: URLROOTRAC + "PJ/Users/" + dataItem.id + "-small.jpg",
+                x: 30,
+                y: 8,
+                width: 60,
+                height: 60
+            }));
+            g.append(new dataviz.diagram.TextBlock({
+                text: dataItem.lb,
+                x: 30,
+                y: 70,
+                fill: "#586477"
+            }));
+        } else {
+            g.append(new dataviz.diagram.Rectangle({
+                width: 180,
+                height: 67,
+                stroke: {
+                    width: 1
+                },
+                fill: "#e8eff7"
+            }));
+            g.append(new dataviz.diagram.TextBlock({
+                text: dataItem.lb,
+                x: 85,
+                y: 20,
+                fill: "#586477"
+            }));
+            g.append(new dataviz.diagram.Image({
+                source: URLROOTRAC + "PJ/Users/" + dataItem.id + "-small.jpg",
+                x: 3,
+                y: 3,
+                width: 60,
+                height: 60
+            }));
+        }
+
+        return g;
+    }
+
+    function onDataBound(e) {
+        var that = this;
+        setTimeout(function () {
+            that.bringIntoView(that.shapes);
+        }, 0);
+    }
+
+    function createDiagram() {
+
+        var shapesDataSource = {
+            batch: false,
+            transport: {
+                read: {
+                    url: URLROOT + "Orga/ReadShapDiag?ido=@Model",
+                    dataType: "json"
+                },
+            },
+            schema: {
+                model: {
+                    id: "id",
+                    fields: {
+                        id: { from: "id", type: "string", editable: false },
+                        lb: { from: "lb", type: "string" },
+                    }
+                }
+            }
+        };
+
+        var connectionsDataSource = {
+            //batch: false,
+            autoSync: false,
+            transport: {
+                read: {
+                    url: URLROOT + "Orga/ReadConnectionDiag?ido=@Model",
+                    dataType: "json"
+                },
+                @*update: {
+                    url: URLROOT + "Orga/ReadConnectionDiag?ido=@Model",
+                    dataType: "json"
+                },*@
+
+                create: {
+                    @*url: URLROOT + "Orga/ReadConnectionDiag?ido=@Model",*@
+                    dataType: "json"
+                },
+            },
+            schema: {
+                model: {
+                    fields: {
+                        from: { from: "sup", type: "string", editable: false },
+                        to: { from: "id", type: "string", editable: false },
+                    }
+                }
+            }
+        };
+
+        $("#diagram").kendoDiagram({
+            dataSource: shapesDataSource,
+            connectionsDataSource: connectionsDataSource,
+            layout: {
+                type: "tree",
+                subtype: "tipover",
+                tipOverTreeStartLevel: 0,
+                underneathHorizontalOffset: 5,
+                horizontalSeparation: 10,
+                verticalSeparation:10
+            },
+            //layout: {
+            //    type: "layered"
+            //},
+            shapeDefaults: {
+                visual: visualTemplate
+            },
+            connectionDefaults: {
+                stroke: {
+                    color: "#586477",
+                    width: 2
+                }
+            },
+            editable: false,
+            //editable: {
+            //    tools: ["edit"],
+            //    connectionTemplate: kendo.template($("#popup-editor").html())
+            //},
+            dataBound: onDataBound,
+            select: onSelect,
+        });
+        //var diagram = $("#diagram").getKendoDiagram();
+        //diagram.bringIntoView(diagram.shapes);
+    }
+    $(document).ready(createDiagram);
+    $(document).ready(function () {
+        $("#subtype").kendoDropDownList();
+
+        $("#subtype").change(function () {
+            $("#diagram").getKendoDiagram().layout({
+                subtype: $(this).val(),
+                type: "tree",
+                underneathHorizontalOffset: 1,
+                //horizontalSeparation: 10,
+                //verticalSeparation:10
+            });
+        });
+    });
+
+    function updateSliderIndicator(e) {
+        $("#diagramZoomIndicator").attr("value", e.value);
+
+        $("#diagram").data("kendoDiagram").zoom(e.value / 100);
+    }
+
+    $("#diagramZoom").kendoSlider({
+        min: 10,
+        max: 200,
+        value: 100,
+        smallStep: 10,
+        largeStep: 50,
+        tickPlacement: "none",
+        showButtons: false,
+        change: updateSliderIndicator,
+        slide: updateSliderIndicator
+    });
+
+    function onSelect(e) {
+        if (e.selected.length) {
+            TC(e.selected[0].dataItem.id);
+        }
+    }
+
+    //function test()
+    //{
+    //    alert("aaaaaaaaaaaa");
+    //}
+</script>
+
+@*@(Html.Kendo().ContextMenu()
+        .Name("menu")
+            .Target("#diagram")
+        .Filter("g")
+        .Orientation(ContextMenuOrientation.Horizontal)
+        .Animation(animation =>
+        {
+            animation.Open(open =>
+            {
+                open.Fade(FadeDirection.In);
+                open.Duration(500);
+            });
+        })
+        .Items(items =>
+        {
+            items.Add()
+                .Text("Ajouter Enfant");
+            items.Add()
+                .Text("Ajouter parent");
+
+        })
+)*@
