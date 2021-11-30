@@ -71,16 +71,12 @@
     var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
     var eventer = window[eventMethod];
     var messageEvent = eventMethod === "attachEvent" ? "onmessage" : "message";
-
+    
     eventer(messageEvent, function (e) {
         var parts = e.data.split(',');
-        console.log(parts)
-        if (parts[0] == "hideGriser")
-            loggedApps.push(parts[1]);
-        else {
-            clearInterval(timer);
-            alert("Login ou mot de passe incorrect");
-        }
+        
+        loggedApps.push(parts[1]);
+        console.log(loggedApps)
     });
 
 
