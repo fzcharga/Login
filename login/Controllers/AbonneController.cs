@@ -16,16 +16,20 @@ namespace login.Controllers
 
 
         public UserManager<ApplicationUser> UserManager { get; private set; }
+
+        // test 1 FZ Git
+
         // GET: Abonne
         public ActionResult Index()
         {
             return View();
         }
-
+        
         public ActionResult ExistMail(string email)
         {
             var exist = db.Abonne.Any(a => a.Email == email);
             return Json(exist, JsonRequestBehavior.AllowGet);
+
         }
 
         public ActionResult ReadAbonne()
